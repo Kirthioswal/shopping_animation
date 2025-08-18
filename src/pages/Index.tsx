@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import PlaySection from "@/components/PlaySection";
 import TeamSection from "@/components/TeamSection";
 import ProcessSection from "@/components/ProcessSection";
+import AITeamSection from "@/components/AITeamSection";
 import CommandSection from "@/components/CommandSection";
 
 const Index = () => {
@@ -13,6 +14,7 @@ const Index = () => {
       <PlaySection />
       <TeamSection />
       <ProcessSection />
+      <AITeamSection />
       <CommandSection />
     </div>
   );
