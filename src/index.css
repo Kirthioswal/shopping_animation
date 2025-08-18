@@ -127,4 +127,14 @@ All colors MUST be HSL.
   .gradient-card {
     background: var(--gradient-card);
   }
+
+  /* Scroll Animation Styles */
+  .animate-on-scroll {
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
 }
