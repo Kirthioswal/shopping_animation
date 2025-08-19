@@ -9,15 +9,19 @@ import CommandSection from "@/components/CommandSection";
 
 const Index = () => {
   return (
-    <div className="min-h-screen gradient-bg">
+    <div className="relative">
       <Header />
       <HeroSection />
-      <PlaySection />
-      <TeamSection />
-      <ProcessSection />
-      <AITeamSection />
-      <BusinessLearningSection />
-      <CommandSection />
+      
+      {/* Ensure enough scrollable content for video animation */}
+      <div className="relative z-20 bg-background">
+        <PlaySection />
+        <TeamSection />
+        <ProcessSection />
+        <AITeamSection />
+        <BusinessLearningSection />
+        <CommandSection />
+      </div>
     </div>
   );
 };
