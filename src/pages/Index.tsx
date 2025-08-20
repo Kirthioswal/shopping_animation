@@ -6,6 +6,7 @@ import ProcessSection from "@/components/ProcessSection";
 import AITeamSection from "@/components/AITeamSection";
 import BusinessLearningSection from "@/components/BusinessLearningSection";
 import CommandSection from "@/components/CommandSection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -21,6 +22,7 @@ const Index = () => {
         <AITeamSection />
         <BusinessLearningSection />
         <CommandSection />
+        <Footer />
       </div>
     </div>
   );
