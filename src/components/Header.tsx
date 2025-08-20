@@ -7,7 +7,8 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <div className="text-2xl font-bold gradient-text">Jiffy</div>
+            <img src="/src/assets/logo.png" alt="Jiffy Logo" className="h-10 w-20" />
+            {/* <div className="text-2xl font-bold gradient-text">Jiffy</div> */}
           </div>
 
           {/* Navigation */}
