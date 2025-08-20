@@ -2,73 +2,74 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useScrollSync } from '@/hooks/use-scroll-sync';
 
 interface AstronautScrollProps {
-  videoSrc: string;
   className?: string;
   containerHeight?: string;
   animationHeight?: number; // Height in viewport units over which animation completes
 }
 
 const AstronautScroll = ({ 
-  videoSrc, 
   className = '',
   containerHeight = 'min-h-[200vh]',
   animationHeight = 1
 }: AstronautScrollProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [currentFrame, setCurrentFrame] = useState(1);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<{ [key: number]: HTMLImageElement }>({});
 
-  // Preload and setup video
+  const TOTAL_FRAMES = 198;
+
+  // Preload images for smooth animation
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const preloadImages = async () => {
+      const imagePromises: Promise<HTMLImageElement>[] = [];
+      const imageMap: { [key: number]: HTMLImageElement } = {};
 
-    const handleLoadedData = () => {
-      setIsVideoLoaded(true);
-      // Ensure video is paused and at start
-      video.pause();
-      video.currentTime = 0;
-    };
-
-    const handleLoadedMetadata = () => {
-      // Video metadata is loaded, ready for scrubbing
-      video.pause();
-    };
-
-    video.addEventListener('loadeddata', handleLoadedData);
-    video.addEventListener('loadedmetadata', handleLoadedMetadata);
-    
-    // Preload the video
-    video.load();
-
-    return () => {
-      video.removeEventListener('loadeddata', handleLoadedData);
-      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-    };
-  }, [videoSrc]);
-
-  // Handle video time updates based on scroll progress
-  const handleScrollProgress = useCallback((progress: number) => {
-    const video = videoRef.current;
-    if (!video || !isVideoLoaded) return;
-
-    const videoDuration = video.duration;
-    if (videoDuration && !isNaN(videoDuration)) {
-      const targetTime = progress * videoDuration;
-      
-      // Only update if there's a meaningful difference to avoid excessive updates
-      if (Math.abs(video.currentTime - targetTime) > 0.1) {
-        video.currentTime = targetTime;
+      for (let i = 1; i <= TOTAL_FRAMES; i++) {
+        const promise = new Promise<HTMLImageElement>((resolve, reject) => {
+          const img = new Image();
+          const frameNumber = i.toString().padStart(4, '0');
+          // img.src = `/src/assets/ezgif-split/ezgif-frame-${frameNumber}.jpg`;
+          img.src = new URL(`../assets/documents/aspose_video_134001594189285917_out${frameNumber}.png`, import.meta.url).href;
+          img.onload = () => {
+            imageMap[i] = img;
+            resolve(img);
+          };
+          img.onerror = reject;
+        });
+        imagePromises.push(promise);
       }
+      try {
+        await Promise.all(imagePromises);
+        setLoadedImages(imageMap);
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error('Failed to preload images:', error);
+      }
+    };
+
+    preloadImages();
+  }, []);
+
+  // Handle frame updates based on scroll progress
+  const handleScrollProgress = useCallback((progress: number) => {
+    if (!imagesLoaded) return;
+
+    // Map progress (0-1) to frame number (1-200)
+    const targetFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(progress * TOTAL_FRAMES)));
+    
+    // Only update if frame actually changed to avoid excessive re-renders
+    if (targetFrame !== currentFrame) {
+      setCurrentFrame(targetFrame);
     }
-  }, [isVideoLoaded]);
+  }, [imagesLoaded, currentFrame, TOTAL_FRAMES]);
 
   // Use the scroll sync hook
   useScrollSync({
     onScroll: handleScrollProgress,
     containerRef,
     animationHeight,
-    enabled: isVideoLoaded
+    enabled: imagesLoaded
   });
 
   return (
@@ -76,26 +77,26 @@ const AstronautScroll = ({
       ref={containerRef}
       className={`relative ${containerHeight}`}
     >
-      {/* Fixed video background */}
+      {/* Fixed image sequence background */}
       <div className={`${className} w-full h-full overflow-hidden`}>
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          src={videoSrc}
-          muted
-          playsInline
-          preload="metadata"
-          style={{
-            opacity: isVideoLoaded ? 1 : 0,
-            transition: 'opacity 0.3s ease-in-out',
-            
-          }}
-        />
+        {imagesLoaded && loadedImages[currentFrame] && (
+          <img
+            src={loadedImages[currentFrame].src}
+            alt={`Astronaut frame ${currentFrame}`}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: 1,
+              transition: 'opacity 0.1s ease-out',
+              objectPosition: 'center center',
+              transform: 'translateY(-5%)'
+            }}
+          />
+        )}
         
         {/* Loading state */}
-        {!isVideoLoaded && (
+        {!imagesLoaded && (
           <div className="absolute inset-0 bg-background flex items-center justify-center">
-            <div className="text-muted-foreground">Loading astronaut...</div>
+            <div className="text-muted-foreground">Loading astronaut frames...</div>
           </div>
         )}
         

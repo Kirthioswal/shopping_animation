@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+import { Play, ChevronDown } from "lucide-react";
 import AstronautScroll from "./AstronautScroll";
-import astronautVideo from "@/assets/astronaut.mp4";
+import TypingEffect from "./TypingEffect";
 
 const HeroSection = () => {
   return (
@@ -16,9 +16,30 @@ const HeroSection = () => {
         </h1>
       </div> */}
 
-      {/* Scroll-synced astronaut video background */}
+      {/* Main Headline - positioned above background */}
+      <div className="absolute top-80 left-1/2 transform -translate-x-1/2 z-30 text-center">
+        <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-8 leading-tight">
+          <TypingEffect 
+            text="Your first step of Ecomm: "
+            speed={80}
+          />
+          <TypingEffect 
+            text="Jiffy"
+            speed={80}
+            className="gradient-text"
+            delay={2000}
+          />
+        </h1>
+        
+        {/* <ChevronDown className="w-8 h-8 text-foreground animate-bounce mx-auto mt-4" /> */}
+      </div>
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30" style={{top: 'calc(100vh - 4rem)'}}>
+        <ChevronDown className="w-8 h-8 text-foreground animate-bounce" />
+      </div>
+      
+
+      {/* Scroll-synced astronaut image sequence background */}
       <AstronautScroll 
-        videoSrc={astronautVideo}
         containerHeight="min-h-[200vh]"
         className="fixed top-20 inset-x-0 bottom-0 z-0"
       />
@@ -39,11 +60,7 @@ const HeroSection = () => {
       </div>
 
       <div className="container mx-auto px-6 text-center relative z-10">
-        {/* Main Headline */}
-        <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-8 leading-tight">
-          Your first step of Ecomm,{" "}
-          <span className="gradient-text">Jiffy</span>
-        </h1>
+        {/* Main Headline moved to top - keeping this div for spacing */}
 
         
 
@@ -61,7 +78,7 @@ const HeroSection = () => {
         {/* Subtitle */}
         <div className="max-w-4xl mx-auto mb-12">
           <h2 className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-            <span className="text-foreground font-semibold">Sintra X:</span> The world's first AI-powered assistants, powered by your AI brain. That can complete tasks for you, even while you sleep. All to save your most valuable asset – your time.
+            <span className="text-foreground font-semibold">My Jiffy World:</span> From your Warehouse to anywhere in the world, Jiffy makes Ecomm and logistics quick and simple.
           </h2>
         </div>
 
@@ -82,7 +99,7 @@ const HeroSection = () => {
 
       {/* Decorative elements */}
       <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-background to-transparent" />
-    </section>
+      </section>
     </>
   );
 };
