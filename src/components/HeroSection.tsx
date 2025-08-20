@@ -20,14 +20,20 @@ const HeroSection = () => {
       <div className="absolute top-80 left-1/2 transform -translate-x-1/2 z-30 text-center">
         <h1 className="text-6xl md:text-8xl font-bold text-foreground mb-8 leading-tight">
           <TypingEffect 
-            text="Your first step of Ecomm: "
+            text="Need it now?"
             speed={80}
           />
+          <br />
           <TypingEffect 
-            text="Jiffy"
+            text="Get it in a "
             speed={80}
-            className="gradient-text"
-            delay={2000}
+            delay={1500}
+          />
+          <TypingEffect 
+            text="Jiffy."
+            speed={80}
+            className="text-[#F97316]"
+            delay={2500}
           />
         </h1>
         
