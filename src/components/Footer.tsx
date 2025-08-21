@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Us Section */}
-          <div>
+          {/* <div>
             <h3 className="font-semibold text-foreground mb-4">About Us</h3>
             <ul className="space-y-2">
               <li>
@@ -30,7 +30,7 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Legal Section */}
           <div>
@@ -46,7 +46,7 @@ const Footer = () => {
                   Terms and Conditions
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/refund" className="text-muted-foreground hover:text-foreground transition-colors">
                   Refund Policy
                 </Link>
@@ -60,12 +60,12 @@ const Footer = () => {
                 <Link to="/policies" className="text-muted-foreground hover:text-foreground transition-colors">
                   Other Policies
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
           {/* Product Section */}
-          <div>
+          {/* <div>
             <h3 className="font-semibold text-foreground mb-4">Product</h3>
             <ul className="space-y-2">
               <li>
@@ -89,10 +89,10 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Company Section */}
-          <div>
+          {/* <div>
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
@@ -116,7 +116,7 @@ const Footer = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom Section */}

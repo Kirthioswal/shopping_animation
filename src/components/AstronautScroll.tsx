@@ -29,7 +29,7 @@ const AstronautScroll = ({
         const promise = new Promise<HTMLImageElement>((resolve, reject) => {
           const img = new Image();
           const frameNumber = i.toString().padStart(4, '0');
-          // img.src = `/src/assets/ezgif-split/ezgif-frame-${frameNumber}.jpg`;
+          // img.src = `/assets/ezgif-split/ezgif-frame-${frameNumber}.jpg`;
           img.src = new URL(`../assets/documents/aspose_video_134001594189285917_out${frameNumber}.png`, import.meta.url).href;
           img.onload = () => {
             imageMap[i] = img;

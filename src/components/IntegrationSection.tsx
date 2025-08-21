@@ -20,30 +20,30 @@ const IntegrationSection = () => {
             <div className="grid grid-cols-4 gap-6">
               {/* Row 1 */}
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/amazon icon.png" alt="Amazon" className="w-full h-full object-contain" />
+                <img src="/assets/icons/amazon icon.png" alt="Amazon" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/flipkart icon.png" alt="Flipkart" className="w-full h-full object-contain" />
+                <img src="/assets/icons/flipkart icon.png" alt="Flipkart" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/shopify icon.png" alt="Shopify" className="w-full h-full object-contain" />
+                <img src="/assets/icons/shopify icon.png" alt="Shopify" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/myntra icon.webp" alt="Myntra" className="w-full h-full object-contain" />
+                <img src="/assets/icons/myntra icon.webp" alt="Myntra" className="w-full h-full object-contain" />
               </div>
 
               {/* Row 2 */}
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/Meesho icon.png" alt="Meesho" className="w-full h-full object-contain" />
+                <img src="/assets/icons/Meesho icon.png" alt="Meesho" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/snapdeal icon.png" alt="Snapdeal" className="w-full h-full object-contain" />
+                <img src="/assets/icons/snapdeal icon.png" alt="Snapdeal" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/woo comm icon.png" alt="WooCommerce" className="w-full h-full object-contain" />
+                <img src="/assets/icons/woo comm icon.png" alt="WooCommerce" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/unicomm icon.png" alt="Unicommerce" className="w-full h-full object-contain" />
+                <img src="/assets/icons/unicomm icon.png" alt="Unicommerce" className="w-full h-full object-contain" />
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@ const IntegrationSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <img 
-                src="/src/assets/phone/phone.png" 
+                src="/assets/phone/phone.png" 
                 alt="Integration Phone Interface" 
                 className="w-full max-w-md mx-auto rounded-3xl shadow-2xl hover:scale-105 transition-transform duration-500"
                 style={{

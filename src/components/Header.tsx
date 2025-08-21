@@ -21,7 +21,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-            <img src="/src/assets/logo.png" alt="Jiffy Logo" className="h-10 w-20" />
+            <img src="/assets/logo.png" alt="Jiffy Logo" className="h-10 w-20" />
             {/* <div className="text-2xl font-bold gradient-text">Jiffy</div> */}
           </Link>
 
