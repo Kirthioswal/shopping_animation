@@ -47,7 +47,7 @@ const CommandTeamSection = () => {
             {/* Astronaut Image */}
             <div className="mt-8">
               <img 
-                src="/assets/astronaut running.png" 
+                src="/assets/astronaut-running.png" 
                 alt="Astronaut Running" 
                 className="w-full max-w-md mx-auto lg:mx-0"
               />

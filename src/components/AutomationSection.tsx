@@ -8,7 +8,7 @@ const AutomationSection = () => {
       <div 
         className="relative h-screen bg-cover bg-center bg-no-repeat flex items-end justify-center pb-20"
         style={{
-          backgroundImage: `url('../assets/astronaut working.png')`
+          backgroundImage: `url('../assets/astronaut-working.png')`
         }}
       >
         {/* Light overlay for text readability while preserving image colors */}
