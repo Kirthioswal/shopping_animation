@@ -37,7 +37,7 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="py-20 bg-black">
+    <section id="faq-section" className="py-20 bg-black">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left Side - Heading */}

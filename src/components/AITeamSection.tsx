@@ -96,7 +96,7 @@ const AITeamSection = () => {
   }, []);
 
   return (
-    <section className="py-20 bg-black">
+    <section id="ai-team-section" className="py-20 bg-black">
       <div className="container mx-auto px-6">
         {/* Header Section */}
         <div className="text-center mb-16">

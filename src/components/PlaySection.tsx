@@ -23,7 +23,7 @@ const PlaySection = () => {
   }, [sampleImages.length]);
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-black">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}

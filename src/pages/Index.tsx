@@ -19,15 +19,16 @@ const Index = () => {
       
       {/* Overlapping content starts at 80% of hero scroll (frame 160) */}
       <div className="relative z-20 bg-background" style={{ marginTop: '-5vh' }}>
-        <PlaySection />
+        
         <AutomationSection />
         <IntegrationSection />
         {/* <TeamSection /> */}
         {/* <ProcessSection /> */}
         <AITeamSection />
+        {/* <PlaySection /> */}
         {/* <BusinessLearningSection /> */}
         {/* <CommandSection /> */}
-        <CommandTeamSection />
+        {/* <CommandTeamSection /> */}
         <FAQSection />
         
         <Footer />
