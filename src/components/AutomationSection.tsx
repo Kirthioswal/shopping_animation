@@ -7,7 +7,7 @@ const AutomationSection = () => {
       <div 
         className="relative h-screen bg-cover bg-center bg-no-repeat flex items-end justify-center pb-20"
         style={{
-          backgroundImage: `url('/src/assets/astronaut working.jpg')`
+          backgroundImage: `url('/src/assets/astronaut working.png')`
         }}
       >
         {/* Light overlay for text readability while preserving image colors */}
@@ -16,13 +16,13 @@ const AutomationSection = () => {
         {/* Text Content */}
         <div className="relative z-10 text-center text-white">
           <h2 className="text-5xl md:text-6xl font-bold mb-4">
-            Automates work.
+            Your Logistics Crew,
           </h2>
           <h3 className="text-5xl md:text-6xl font-bold">
-            Even while you sleep.
+            Always On Duty.
           </h3>
           <p className="text-lg md:text-xl mt-6 max-w-2xl mx-auto text-white/90">
-            Automate tasks with business automation tools—create social media posts, respond to comments, and more.
+            From scanning to shipping, Jiffy's smart team works round the clock to make logistics effortless.
           </p>
         </div>
       </div>

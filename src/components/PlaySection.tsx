@@ -1,24 +1,13 @@
 import { useState, useEffect } from 'react';
+import slide1 from '@/assets/Slider/slide1.png';
 
 const PlaySection = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const sampleImages = [
     {
-      src: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=450&fit=crop&crop=center",
-      alt: "Team collaboration workspace"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=450&fit=crop&crop=center", 
-      alt: "Business analytics dashboard"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&h=450&fit=crop&crop=center",
-      alt: "Creative design process"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&h=450&fit=crop&crop=center",
-      alt: "Project management tools"
+      src: slide1,
+      alt: "Jiffy workspace slide"
     }
   ];
 
@@ -40,9 +29,11 @@ const PlaySection = () => {
           {/* Text Content */}
           <div>
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-8 leading-tight">
-              Jiffy.{" "}
-              <span className="gradient-text">Where work is play.</span>
+              <span className="gradient-text">Track. Manage. Scale.</span>
             </h2>
+            <p className="text-xl text-muted-foreground mb-8">
+              Quick commerce made effortless with Jiffy.
+            </p>
           </div>
 
           {/* Image Slider */}
