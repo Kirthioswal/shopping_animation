@@ -40,7 +40,7 @@ const IntegrationSection = () => {
                 <img src="/src/assets/icons/snapdeal icon.png" alt="Snapdeal" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/src/assets/icons/woo comm icon.webp" alt="WooCommerce" className="w-full h-full object-contain" />
+                <img src="/src/assets/icons/woo comm icon.png" alt="WooCommerce" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
                 <img src="/src/assets/icons/unicomm icon.png" alt="Unicommerce" className="w-full h-full object-contain" />

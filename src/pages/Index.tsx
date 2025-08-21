@@ -1,14 +1,14 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import PlaySection from "@/components/PlaySection";
-import AutomationSection from "@/components/AutomationSection";
-import IntegrationSection from "@/components/IntegrationSection";
-import TeamSection from "@/components/TeamSection";
+import AutomationSection from "../components/AutomationSection";
+import IntegrationSection from "../components/IntegrationSection";
+import CommandTeamSection from "../components/CommandTeamSection";
 import ProcessSection from "@/components/ProcessSection";
 import AITeamSection from "@/components/AITeamSection";
 import BusinessLearningSection from "@/components/BusinessLearningSection";
 import CommandSection from "@/components/CommandSection";
-import FAQSection from "@/components/FAQSection";
+import FAQSection from "../components/FAQSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -22,12 +22,14 @@ const Index = () => {
         <PlaySection />
         <AutomationSection />
         <IntegrationSection />
-        <TeamSection />
-        <ProcessSection />
-        <AITeamSection />
-        <BusinessLearningSection />
-        <CommandSection />
+        {/* <TeamSection /> */}
+        {/* <ProcessSection /> */}
+        {/* <AITeamSection /> */}
+        {/* <BusinessLearningSection /> */}
+        {/* <CommandSection /> */}
+        <CommandTeamSection />
         <FAQSection />
+        
         <Footer />
       </div>
     </div>
