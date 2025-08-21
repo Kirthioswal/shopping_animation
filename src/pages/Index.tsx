@@ -17,14 +17,14 @@ const Index = () => {
       <Header />
       <HeroSection />
       
-      {/* Ensure enough scrollable content for video animation */}
-      <div className="relative z-20 bg-background">
+      {/* Overlapping content starts at 80% of hero scroll (frame 160) */}
+      <div className="relative z-20 bg-background" style={{ marginTop: '-5vh' }}>
         <PlaySection />
         <AutomationSection />
         <IntegrationSection />
         {/* <TeamSection /> */}
         {/* <ProcessSection /> */}
-        {/* <AITeamSection /> */}
+        <AITeamSection />
         {/* <BusinessLearningSection /> */}
         {/* <CommandSection /> */}
         <CommandTeamSection />

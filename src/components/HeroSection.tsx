@@ -46,8 +46,9 @@ const HeroSection = () => {
 
       {/* Scroll-synced astronaut image sequence background */}
       <AstronautScroll 
-        containerHeight="min-h-[200vh]"
+        containerHeight="min-h-[160vh]"
         className="fixed top-20 inset-x-0 bottom-0 z-0"
+        animationHeight={1.6}
       />
       
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden z-10">
@@ -56,14 +57,14 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/10 to-background/30" />
       
       {/* Floating badge */}
-      <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-10">
+      {/* <div className="absolute top-24 left-1/2 transform -translate-x-1/2 z-10">
         <div className="bg-card/50 backdrop-blur-sm border border-border rounded-full px-4 py-2 text-sm">
           <span className="text-muted-foreground">Jiffy (All Help you need)</span>
           <Button size="sm" className="ml-2 bg-primary text-primary-foreground hover:bg-primary/90">
             Buy now →
           </Button>
         </div>
-      </div>
+      </div> */}
 
       <div className="container mx-auto px-6 text-center relative z-10">
         {/* Main Headline moved to top - keeping this div for spacing */}
@@ -71,7 +72,7 @@ const HeroSection = () => {
         
 
         {/* Video Button */}
-        <div className="mb-12">
+        {/* <div className="mb-12">
           <Button 
             variant="ghost" 
             className="text-foreground hover:text-primary transition-colors text-lg group"
@@ -79,26 +80,33 @@ const HeroSection = () => {
             <Play className="w-5 h-5 mr-2 group-hover:text-primary" />
             Watch Video
           </Button>
-        </div>
+        </div> */}
 
         {/* Subtitle */}
         <div className="max-w-4xl mx-auto mb-12">
-          <h2 className="text-xl md:text-2xl text-muted-foreground leading-relaxed">
-            <span className="text-foreground font-semibold">My Jiffy World:</span> From your Warehouse to anywhere in the world, Jiffy makes Ecomm and logistics quick and simple.
+          <div className="mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold gradient-text mb-4">
+              My Jiffy World:
+            </h1>
+          </div>
+          <h2 className="text-xl md:text-2xl text-muted-foreground leading-relaxed p-6 rounded-lg transition-all duration-300 hover:bg-black/20 hover:backdrop-blur-sm">
+            <span className="text-foreground font-semibold">Powering Quick Commerce</span>
+            <br />
+            From dark stores to doorsteps, Jiffy makes quick commerce logistics effortless—delivering products to your customers in record time.          
           </h2>
         </div>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button 
+          {/* <Button 
             variant="ghost" 
             className="text-foreground hover:text-primary transition-colors text-lg group"
           >
             <Play className="w-5 h-5 mr-2 group-hover:text-primary" />
             Watch Video
-          </Button>
+          </Button> */}
           <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity text-lg px-8 py-3">
-            Get Access
+            Get Started
           </Button>
         </div>
       </div>

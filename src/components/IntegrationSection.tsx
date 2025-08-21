@@ -4,7 +4,7 @@ const IntegrationSection = () => {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Text and Icons */}
-          <div className="text-white">
+          <div className="text-white lg:col-span-1">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               Integrates with{" "}
               <br />
@@ -52,9 +52,13 @@ const IntegrationSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <img 
-                src="/src/assets/phone.png" 
+                src="/src/assets/phone/phone.png" 
                 alt="Integration Phone Interface" 
                 className="w-full max-w-md mx-auto rounded-3xl shadow-2xl hover:scale-105 transition-transform duration-500"
+                style={{
+                  maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)',
+                  WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)'
+                }}
               />
             </div>
             

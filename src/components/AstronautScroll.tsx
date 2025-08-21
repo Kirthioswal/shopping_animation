@@ -55,8 +55,9 @@ const AstronautScroll = ({
   const handleScrollProgress = useCallback((progress: number) => {
     if (!imagesLoaded) return;
 
-    // Map progress (0-1) to frame number (1-200)
-    const targetFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(progress * TOTAL_FRAMES)));
+    // Map progress (0-1) to frame number (1-198)
+    // Ensure we reach frame 198 at 100% progress
+    const targetFrame = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(1 + (progress * (TOTAL_FRAMES - 1)))));
     
     // Only update if frame actually changed to avoid excessive re-renders
     if (targetFrame !== currentFrame) {
