@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import astronautworking from "@/assets/astronaut working.png";
 
 const AutomationSection = () => {
   return (
@@ -7,7 +8,7 @@ const AutomationSection = () => {
       <div 
         className="relative h-screen bg-cover bg-center bg-no-repeat flex items-end justify-center pb-20"
         style={{
-          backgroundImage: `url('/assets/astronaut working.png')`
+          backgroundImage: astronautworking,
         }}
       >
         {/* Light overlay for text readability while preserving image colors */}
