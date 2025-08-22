@@ -4,33 +4,30 @@ const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* About Us Section */}
-          {/* <div>
-            <h3 className="font-semibold text-foreground mb-4">About Us</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link to="/help" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-colors">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link to="/plans" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Plans and Payments
-                </Link>
-              </li>
-            </ul>
-          </div> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Contact Us Section */}
+          <div>
+            <h3 className="font-semibold text-foreground mb-4">Contact Us</h3>
+            <div className="space-y-3">
+              <div>
+                <p className="text-muted-foreground text-sm mb-1">Reach us at</p>
+                <a 
+                  href="mailto:Hello@jiffy.world" 
+                  className="text-foreground hover:text-primary transition-colors font-medium"
+                >
+                  Hello@jiffy.world
+                </a>
+              </div>
+              <div>
+                <p className="text-muted-foreground text-sm mb-2 font-medium">Corporate Office Address:</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  3rd Floor, JMD Empire Square,<br />
+                  Mehrauli-Gurgaon Rd,<br />
+                  Gurugram, Haryana 122001
+                </p>
+              </div>
+            </div>
+          </div>
 
           {/* Legal Section */}
           <div>
