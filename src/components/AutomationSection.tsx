@@ -15,18 +15,18 @@ const AutomationSection = () => {
           backgroundImage: `url(${astronautWorking})`
         }}
       >
-        {/* Light overlay for text readability while preserving image colors */}
-        <div className="absolute inset-0 " />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/20" />
         
         {/* Text Content */}
         <div className="relative z-10 text-center text-white">
-          <h2 className="text-5xl md:text-6xl font-bold mb-4">
+          <h2 className="text-5xl md:text-6xl font-bold mb-4 transition-all duration-300 hover:scale-105 hover:text-blue-300 cursor-default">
             Your Logistics Crew,
           </h2>
-          <h3 className="text-5xl md:text-6xl font-bold">
+          <h3 className="text-5xl md:text-6xl font-bold transition-all duration-300 hover:scale-105 hover:text-orange-300 cursor-default">
             Always On Duty.
           </h3>
-          <p className="text-lg md:text-xl mt-6 max-w-2xl mx-auto text-white/90">
+          <p className="text-lg md:text-xl mt-6 max-w-2xl mx-auto text-white/90 transition-all duration-300 hover:text-green-300 hover:scale-105 cursor-default">
             From scanning to shipping, Jiffy's smart team works round the clock to make logistics effortless.
           </p>
         </div>
