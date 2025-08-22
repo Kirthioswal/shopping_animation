@@ -1,5 +1,9 @@
 import { Card } from "@/components/ui/card";
 import Step1 from "@/assets/Steps/Step1.png";
+import astronautWorking from "@/assets/astronaut-working.png";
+import block1Image from "@/assets/features/block1image.png";
+import block2Image from "@/assets/features/block2image.png";
+import block3Image from "@/assets/features/block3image.png";
 
 const AutomationSection = () => {
   return (
@@ -8,7 +12,7 @@ const AutomationSection = () => {
       <div 
         className="relative h-screen bg-cover bg-center bg-no-repeat flex items-end justify-center pb-20"
         style={{
-          backgroundImage: `url('../assets/astronaut-working.png')`
+          backgroundImage: `url(${astronautWorking})`
         }}
       >
         {/* Light overlay for text readability while preserving image colors */}
@@ -35,7 +39,7 @@ const AutomationSection = () => {
           <div className="mb-12">
             <Card className="bg-gradient-to-r from-purple-600 to-purple-700 border-0 p-0 text-white shadow-[0_8px_32px_rgba(147,51,234,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer">
               <img 
-                src="/assets/features/block1image.png" 
+                src={block1Image} 
                 alt="Social Media Automation Feature" 
                 className="w-full h-full object-cover"
               />
@@ -47,7 +51,7 @@ const AutomationSection = () => {
             {/* Facebook Comments Card */}
             <Card className="bg-gradient-to-br from-blue-600 to-blue-700 border-0 p-0 text-white shadow-[0_8px_32px_rgba(59,130,246,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer">
               <img 
-                src="/assets/features/block2image.png" 
+                src={block2Image} 
                 alt="Facebook Comments Management Feature" 
                 className="w-full h-full object-cover"
               />
@@ -56,7 +60,7 @@ const AutomationSection = () => {
             {/* Meeting Prep Card */}
             <Card className="bg-gradient-to-br from-orange-600 to-orange-700 border-0 p-0 text-white shadow-[0_8px_32px_rgba(249,115,22,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer">
               <img 
-                src="/assets/features/block3image.png" 
+                src={block3Image} 
                 alt="Meeting Preparation Feature" 
                 className="w-full h-full object-cover"
               />

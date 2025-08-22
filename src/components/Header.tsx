@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-            <img src="./assets/logo.png" alt="Jiffy Logo" className="h-10 w-20" />
+            <img src={logo} alt="Jiffy Logo" className="h-10 w-20" />
             {/* <div className="text-2xl font-bold gradient-text">Jiffy</div> */}
           </Link>
 

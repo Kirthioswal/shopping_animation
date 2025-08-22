@@ -1,3 +1,13 @@
+import amazonIcon from "@/assets/icons/amazon-icon.png";
+import flipkartIcon from "@/assets/icons/flipkart-icon.png";
+import shopifyIcon from "@/assets/icons/shopify-icon.png";
+import myntraIcon from "@/assets/icons/myntra-icon.webp";
+import meeshoIcon from "@/assets/icons/Meesho-icon.png";
+import snapdealIcon from "@/assets/icons/snapdeal-icon.png";
+import woocommIcon from "@/assets/icons/woocomm-icon.png";
+import unicommIcon from "@/assets/icons/unicomm-icon.png";
+import phoneImage from "@/assets/phone/Phone.png";
+
 const IntegrationSection = () => {
   return (
     <section id="integration-section" className="py-20 bg-black">
@@ -20,30 +30,30 @@ const IntegrationSection = () => {
             <div className="grid grid-cols-4 gap-6">
               {/* Row 1 */}
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/amazon-icon.png" alt="Amazon" className="w-full h-full object-contain" />
+                <img src={amazonIcon} alt="Amazon" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/flipkart-icon.png" alt="Flipkart" className="w-full h-full object-contain" />
+                <img src={flipkartIcon} alt="Flipkart" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/shopify-icon.png" alt="Shopify" className="w-full h-full object-contain" />
+                <img src={shopifyIcon} alt="Shopify" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/myntra-icon.webp" alt="Myntra" className="w-full h-full object-contain" />
+                <img src={myntraIcon} alt="Myntra" className="w-full h-full object-contain" />
               </div>
 
               {/* Row 2 */}
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/Meesho-icon.png" alt="Meesho" className="w-full h-full object-contain" />
+                <img src={meeshoIcon} alt="Meesho" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/snapdeal-icon.png" alt="Snapdeal" className="w-full h-full object-contain" />
+                <img src={snapdealIcon} alt="Snapdeal" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/woocomm-icon.png" alt="WooCommerce" className="w-full h-full object-contain" />
+                <img src={woocommIcon} alt="WooCommerce" className="w-full h-full object-contain" />
               </div>
               <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src="/assets/icons/unicomm-icon.png" alt="Unicommerce" className="w-full h-full object-contain" />
+                <img src={unicommIcon} alt="Unicommerce" className="w-full h-full object-contain" />
               </div>
             </div>
           </div>
@@ -52,7 +62,7 @@ const IntegrationSection = () => {
           <div className="relative">
             <div className="relative z-10">
               <img 
-                src="/assets/phone/phone.png" 
+                src={phoneImage} 
                 alt="Integration Phone Interface" 
                 className="w-full max-w-md mx-auto rounded-3xl shadow-2xl hover:scale-105 transition-transform duration-500"
                 style={{
