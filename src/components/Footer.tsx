@@ -144,6 +144,22 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
+              Facebook
+            </a>
+            <a 
+              href="https://www.instagram.com/jiffy.world" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Instagram
+            </a>
+            <a 
+              href="https://www.facebook.com/jiffy.world" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
               GitHub
             </a>
           </div>
