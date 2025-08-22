@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import Step1 from "@/assets/Steps/Step1.png";
 import astronautWorking from "@/assets/astronaut-working.png";
 import block1Image from "@/assets/features/block1image.png";
+import block1ImageMobile from "@/assets/features/block1imagephoneview.png";
 import block2Image from "@/assets/features/block2image.png";
 import block3Image from "@/assets/features/block3image.png";
 
@@ -38,10 +39,17 @@ const AutomationSection = () => {
           {/* Horizontal Card - Social Media Automation */}
           <div className="mb-12">
             <Card className="bg-gradient-to-r from-purple-600 to-purple-700 border-0 p-0 text-white shadow-[0_8px_32px_rgba(147,51,234,0.3),inset_0_1px_0_rgba(255,255,255,0.1)] overflow-hidden transition-transform duration-300 hover:scale-105 cursor-pointer">
+              {/* Desktop Image */}
               <img 
                 src={block1Image} 
                 alt="Social Media Automation Feature" 
-                className="w-full h-full object-cover"
+                className="hidden md:block w-full h-full object-cover"
+              />
+              {/* Mobile Image */}
+              <img 
+                src={block1ImageMobile} 
+                alt="Social Media Automation Feature" 
+                className="block md:hidden w-full h-full object-cover"
               />
             </Card>
           </div>

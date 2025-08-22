@@ -105,7 +105,10 @@ const HeroSection = () => {
             <Play className="w-5 h-5 mr-2 group-hover:text-primary" />
             Watch Video
           </Button> */}
-          <Button className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity text-lg px-8 py-3">
+          <Button 
+            className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity text-lg px-8 py-3"
+            onClick={() => window.open('https://my.jiffy.world/login', '_blank')}
+          >
             Get Started
           </Button>
         </div>
