@@ -92,7 +92,7 @@ const About = () => {
                     <h3 className="text-xl font-semibold">Smart Integrations</h3>
                   </div>
                   <p className="text-muted-foreground">
-                    Connect effortlessly with leading platforms like Amazon, Flipkart, Shopify, WooCommerce, Myntra, Meesho, and Unicommerce.
+                    Connect effortlessly with leading wide range of platforms.
                   </p>
                 </CardContent>
               </Card>
@@ -106,7 +106,7 @@ const About = () => {
                     <h3 className="text-xl font-semibold">Courier Flexibility</h3>
                   </div>
                   <p className="text-muted-foreground">
-                    Choose from trusted partners like Bluedart, Ekart, Delhivery, and more, to optimize your delivery network.
+                    Choose from wide range of trusted partners to optimize your delivery network.
                   </p>
                 </CardContent>
               </Card>
