@@ -71,9 +71,7 @@ const Header = () => {
               </button>
             </div>
             
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
-              About Us
-            </a>
+            
           </nav>
 
           {/* CTA Buttons */}

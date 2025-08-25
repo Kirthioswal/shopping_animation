@@ -89,15 +89,15 @@ const Footer = () => {
           </div> */}
 
           {/* Company Section */}
-          {/* <div>
+          <div>
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                  About
+                  About Us
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
                   Blog
                 </Link>
@@ -111,9 +111,9 @@ const Footer = () => {
                 <Link to="/press" className="text-muted-foreground hover:text-foreground transition-colors">
                   Press
                 </Link>
-              </li>
+              </li> */}
             </ul>
-          </div> */}
+          </div>
         </div>
 
         {/* Bottom Section */}
@@ -122,14 +122,6 @@ const Footer = () => {
             © 2024 Jiffy. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a 
-              href="https://twitter.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Twitter
-            </a>
             <a 
               href="https://www.linkedin.com/company/jiffyworld/about/" 
               target="_blank" 
@@ -153,14 +145,6 @@ const Footer = () => {
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Instagram
-            </a>
-            <a 
-              href="https://www.facebook.com/jiffy.world" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              GitHub
             </a>
           </div>
         </div>
