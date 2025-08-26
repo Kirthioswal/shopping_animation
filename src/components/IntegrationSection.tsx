@@ -1,14 +1,29 @@
-import amazonIcon from "@/assets/icons/amazon-icon.png";
-import flipkartIcon from "@/assets/icons/flipkart-icon.png";
-import shopifyIcon from "@/assets/icons/shopify-icon.png";
-import myntraIcon from "@/assets/icons/myntra-icon.webp";
-import meeshoIcon from "@/assets/icons/Meesho-icon.png";
-import snapdealIcon from "@/assets/icons/snapdeal-icon.png";
-import woocommIcon from "@/assets/icons/woocomm-icon.png";
-import unicommIcon from "@/assets/icons/unicomm-icon.png";
 import phoneImage from "@/assets/phone/Phone.png";
+import { GlassIcons } from "@/components/ui/glass-icons";
+import { 
+  AmazonIcon, 
+  FlipkartIcon, 
+  ShopifyIcon, 
+  MyntraIcon, 
+  MeeshoIcon, 
+  SnapdealIcon, 
+  WooCommerceIcon, 
+  UnicommerceIcon 
+} from "@/components/ui/integration-icons";
 
 const IntegrationSection = () => {
+  // Define integration items for the glass icons component
+  const integrationItems = [
+    { icon: <AmazonIcon />, color: 'linear-gradient(135deg, #FF9500 0%, #FF6B35 100%)', label: 'Amazon' },
+    { icon: <FlipkartIcon />, color: 'linear-gradient(135deg, #2874F0 0%, #1E5FCC 100%)', label: 'Flipkart' },
+    { icon: <ShopifyIcon />, color: 'linear-gradient(135deg, #7AB55C 0%, #5E8E3E 100%)', label: 'Shopify' },
+    { icon: <MyntraIcon />, color: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', label: 'Myntra' },
+    { icon: <MeeshoIcon />, color: 'linear-gradient(135deg, #9B1C8C 0%, #7B1FA2 100%)', label: 'Meesho' },
+    { icon: <SnapdealIcon />, color: 'linear-gradient(135deg, #E53E3E 0%, #C53030 100%)', label: 'Snapdeal' },
+    { icon: <WooCommerceIcon />, color: 'linear-gradient(135deg, #96588A 0%, #7B2D8E 100%)', label: 'WooCommerce' },
+    { icon: <UnicommerceIcon />, color: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', label: 'Unicommerce' },
+  ];
+
   return (
     <section id="integration-section" className="py-20 bg-black">
       <div className="container mx-auto px-6 max-w-6xl">
@@ -26,36 +41,8 @@ const IntegrationSection = () => {
               integrations easier than ever.
             </p>
 
-            {/* Integration Icons Grid */}
-            <div className="grid grid-cols-4 gap-6">
-              {/* Row 1 */}
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={amazonIcon} alt="Amazon" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={flipkartIcon} alt="Flipkart" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={shopifyIcon} alt="Shopify" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={myntraIcon} alt="Myntra" className="w-full h-full object-contain" />
-              </div>
-
-              {/* Row 2 */}
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={meeshoIcon} alt="Meesho" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={snapdealIcon} alt="Snapdeal" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={woocommIcon} alt="WooCommerce" className="w-full h-full object-contain" />
-              </div>
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center hover:scale-110 transition-transform duration-300 p-2">
-                <img src={unicommIcon} alt="Unicommerce" className="w-full h-full object-contain" />
-              </div>
-            </div>
+            {/* Glass Integration Icons */}
+            <GlassIcons items={integrationItems} className="!gap-8 !py-0" />
           </div>
 
           {/* Right Side - Phone Image */}

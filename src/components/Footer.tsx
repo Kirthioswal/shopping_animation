@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 
 const Footer = () => {
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-12">
+    <BackgroundBeamsWithCollision className="min-h-[300px] bg-card border-t border-border">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Contact Us Section */}
           <div>
@@ -149,7 +150,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </BackgroundBeamsWithCollision>
   );
 };
 
