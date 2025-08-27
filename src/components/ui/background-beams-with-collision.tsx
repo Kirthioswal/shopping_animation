@@ -223,7 +223,7 @@ const CollisionMechanism = React.forwardRef<
 CollisionMechanism.displayName = "CollisionMechanism";
 
 const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
-  const spans = Array.from({ length: 20 }, (_, index) => ({
+  const spans = Array.from({ length: 100 }, (_, index) => ({
     id: index,
     initialX: 0,
     initialY: 0,
@@ -250,7 +250,7 @@ const Explosion = ({ ...props }: React.HTMLProps<HTMLDivElement>) => {
             opacity: 0,
           }}
           transition={{ duration: Math.random() * 1.5 + 0.5, ease: "easeOut" }}
-          className="absolute h-1 w-1 rounded-full bg-gradient-to-b from-[#5DADE2] to-[#A855F7]"
+          className="absolute h-0.5 w-0.5 rounded-full bg-gradient-to-b from-[#5DADE2] to-[#A855F7]"
         />
       ))}
     </div>

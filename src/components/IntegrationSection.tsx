@@ -42,7 +42,7 @@ const IntegrationSection = () => {
             </p>
 
             {/* Glass Integration Icons */}
-            <GlassIcons items={integrationItems} className="!gap-8 !py-0" />
+            <GlassIcons items={integrationItems} className="!gap-y-16 !gap-x-8 !py-0" />
           </div>
 
           {/* Right Side - Phone Image */}
