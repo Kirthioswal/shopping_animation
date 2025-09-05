@@ -17,12 +17,16 @@ const Privacy = () => {
       <Header />
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-foreground mb-8">Privacy Policy</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-8">Data Privacy & Security</h1>
           
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-8">
             <div>
               <p className="mb-6">
                 At Jiffy World (operated by Reset Supply Chain Private Limited), we value your trust and are committed to safeguarding your privacy. This Privacy Policy explains how we collect, use, store, and protect your information when you use our services, including our Shopify app and related platforms.
+              </p>
+              
+              <p className="mb-6">
+                We are committed to protecting your Personally Identifiable Information (PII) and sensitive business data. All information is collected, stored, and used as described in our Privacy Policy. By using our services, you consent to such processing.
               </p>
             </div>
 

@@ -122,7 +122,16 @@ const Terms = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">12. Privacy Policy</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">12. Third-Party Services</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              Our Platform may integrate with courier partners, logistics providers, or other third-party services. 
+              Jiffy World is not responsible for the performance, delays, or failures of third-party providers. 
+              Any disputes with such providers must be addressed directly with them.
+            </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-foreground mb-4">13. Privacy Policy</h2>
             <p className="text-muted-foreground leading-relaxed">
               Your data is collected and processed as outlined in our Privacy Policy, which explains what information we collect, 
               why, and how it is used.
@@ -130,7 +139,7 @@ const Terms = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">13. Termination of Use</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">14. Termination of Use</h2>
             <p className="text-muted-foreground leading-relaxed">
               Jiffy may suspend, block, or terminate your access to the Applications at any time without prior notice. 
               Jiffy also reserves the right to discontinue or modify its services without liability.
@@ -138,21 +147,21 @@ const Terms = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">14. Severability</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">15. Severability</h2>
             <p className="text-muted-foreground leading-relaxed">
               If any provision of these Terms is found unenforceable, the remaining provisions will continue to remain valid and enforceable.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">15. Governing Law & Jurisdiction</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">16. Governing Law & Jurisdiction</h2>
             <p className="text-muted-foreground leading-relaxed">
               These Terms are governed by the laws of India. Any disputes will fall under the jurisdiction of the courts in New Delhi, India.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">16. Violation of Terms</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">17. Violation of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
               If you violate these Terms, Jiffy may issue warnings, suspend or terminate your account(s), 
               and/or end any contractual agreements with you immediately.
