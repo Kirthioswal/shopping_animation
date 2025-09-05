@@ -22,186 +22,82 @@ const Privacy = () => {
           <div className="prose prose-lg max-w-none text-muted-foreground space-y-8">
             <div>
               <p className="mb-6">
-                We at Jiffy Limited and our affiliates (hereinafter referred to as "Jiffy", "we", "us" or "our") 
-                treat customer trust as our highest priority and are committed to protecting your personal information. 
-                We want you to feel confident and secure while using our products, services, and solutions ("Services").
-              </p>
-              
-              <p className="mb-6">
-                This Privacy Policy explains how we collect, use, transfer, and store your personal data when you 
-                use our Services, and also describes your rights regarding such data.
-              </p>
-              
-              <p className="mb-6">
-                Please read this Privacy Policy carefully before accessing or availing our Services.
+                At Jiffy World (operated by Reset Supply Chain Private Limited), we value your trust and are committed to safeguarding your privacy. This Privacy Policy explains how we collect, use, store, and protect your information when you use our services, including our Shopify app and related platforms.
               </p>
             </div>
 
             <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Definitions</h2>
-              <div className="space-y-3">
-                  <p><strong>Consignee:</strong> The individual or entity financially responsible (the buyer) for receiving a shipment from a Consignor.</p>
-                  <p><strong>Consignor:</strong> The individual or entity (usually the seller) who uses Jiffy's Services to deliver a shipment to a Consignee.</p>
-                  <p><strong>Data Subject:</strong> Any individual who can be identified directly or indirectly by reference to identifiers such as a name, ID number, contact details, or location data.</p>
-                  <p><strong>Third Party Vendors:</strong> Individuals or organizations contracted by Jiffy to provide services.</p>
-                  <p className="mt-4">
-                    We may update Jiffy's Privacy Policy from time to time. The latest version will always be posted on our website. 
-                    We recommend reviewing this Policy periodically for updates.
-                  </p>
-                </div>
-            </section>
-
-            <section>
               <button
-                onClick={() => toggleSection('data-collect')}
+                onClick={() => toggleSection('information-collect')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">1. What Data Do We Collect?</h2>
-                {expandedSections['data-collect'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                <h2 className="text-2xl font-semibold text-foreground">Information We Collect</h2>
+                {expandedSections['information-collect'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
-              {expandedSections['data-collect'] && (
+              {expandedSections['information-collect'] && (
                 <div className="pl-4 pb-4">
-              
-              <h3 className="text-xl font-medium text-foreground mb-3">Personal Information</h3>
-              <p className="mb-4">
-                When you use our Services, we may ask you to provide certain personally identifiable information (PII), 
-                which may include (but is not limited to):
-              </p>
-              <ul className="list-disc list-inside mb-4 space-y-1">
-                <li>Full name</li>
-                <li>Email address</li>
-                <li>Phone number</li>
-                <li>Address (Street, City, State, Postal Code, Country)</li>
-                <li>KYC details/documents</li>
-                <li>Location data</li>
-              </ul>
-              <p className="mb-4">
-                If you share another person's personal information with us, you must be authorized to do so and ensure 
-                they are aware of this Privacy Policy.
-              </p>
-              <p className="mb-6">
-                You may choose not to provide requested information; however, this may limit or prevent access to certain Services.
-              </p>
-
-              <h3 className="text-xl font-medium text-foreground mb-3">Usage Data</h3>
-              <p className="mb-4">We may collect details automatically when you visit our website/app, such as:</p>
-              <ul className="list-disc list-inside mb-6 space-y-1">
-                <li>IP address, browser type/version, device identifiers</li>
-                <li>Pages visited, time and date of visit, time spent on pages</li>
-                <li>Mobile device type, OS, and browser details</li>
-              </ul>
-
-              <h3 className="text-xl font-medium text-foreground mb-3">Cookies Data</h3>
-              <p className="mb-4">
-                Our website and apps use cookies and similar tracking technologies to enhance your experience. 
-                Cookies are small files stored on your device that help us analyze usage patterns and improve our Services.
-              </p>
-              <p className="mb-4">Types of cookies we use include:</p>
-              <ul className="list-disc list-inside mb-4 space-y-1">
-                <li>Session Cookies (for service operations)</li>
-                <li>Preference Cookies (to remember settings)</li>
-                <li>Security Cookies (to protect your account)</li>
-              </ul>
-                <p>
-                  You may disable cookies in your browser settings, but this could limit certain features.
-                </p>
+                  <p className="mb-4">When you use our services, we may collect the following types of information:</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">Account Information</h3>
+                  <p className="mb-4">Name, email address, phone number, company details, and login credentials.</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">Shopify Store Data</h3>
+                  <p className="mb-4">Order details, product information, customer shipping addresses, and related transaction data necessary to process and fulfill orders.</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">Courier & Logistics Data</h3>
+                  <p className="mb-4">Courier partner details, AWB numbers, tracking status, and delivery information.</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">Billing Information (if applicable in the future)</h3>
+                  <p className="mb-4">Payment method details processed through secure third-party providers.</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">Technical Information</h3>
+                  <p className="mb-4">IP address, device details, browser type, operating system, and app usage analytics.</p>
+                  
+                  <h3 className="text-xl font-medium text-foreground mb-3">PII and Sensitive Information</h3>
+                  <p>We recognize the sensitivity of personally identifiable information (PII) and company data shared with us. We collect only what is necessary to provide our services and are committed to protecting it at all times.</p>
                 </div>
               )}
             </section>
 
             <section>
               <button
-                onClick={() => toggleSection('data-when')}
+                onClick={() => toggleSection('how-we-use')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">2. When and How We Collect Data</h2>
-                {expandedSections['data-when'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                <h2 className="text-2xl font-semibold text-foreground">How We Use Your Information</h2>
+                {expandedSections['how-we-use'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
-              {expandedSections['data-when'] && (
+              {expandedSections['how-we-use'] && (
                 <div className="pl-4 pb-4">
-                  <p className="mb-4">We collect data in several ways, including:</p>
+                  <p className="mb-4">We use the collected information to:</p>
                   <ul className="list-disc list-inside space-y-1">
-                    <li>Directly from you (website, app, calls, WhatsApp, email, chat)</li>
-                    <li>When you create an account</li>
-                    <li>When you send or receive shipments</li>
-                    <li>When you track packages</li>
-                    <li>When you verify your identity (e.g., KYC documents)</li>
-                    <li>When you engage with customer support</li>
-                    <li>From client businesses that partner with Jiffy</li>
-                    <li>Through surveys, feedback forms, and social media</li>
-                    <li>During delivery interactions</li>
+                    <li>Sync orders and process shipments from your Shopify store.</li>
+                    <li>Assign couriers, generate AWB numbers, and update tracking details.</li>
+                    <li>Provide customer support and resolve issues.</li>
+                    <li>Improve our services, features, and user experience.</li>
+                    <li>Comply with legal, regulatory, or contractual obligations.</li>
                   </ul>
+                  <p className="mt-4 font-medium">We do not sell, rent, or trade your personal or business information to third parties.</p>
                 </div>
               )}
             </section>
 
             <section>
               <button
-                onClick={() => toggleSection('data-why')}
+                onClick={() => toggleSection('sharing-information')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">3. Why We Collect Your Data</h2>
-                {expandedSections['data-why'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                <h2 className="text-2xl font-semibold text-foreground">Sharing of Information</h2>
+                {expandedSections['sharing-information'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
-              {expandedSections['data-why'] && (
+              {expandedSections['sharing-information'] && (
                 <div className="pl-4 pb-4">
-                  <p className="mb-4">We collect and use data to:</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Provide and improve our Services (delivery, warehousing, logistics, cross-border solutions, etc.)</li>
-                    <li>Send tracking updates and notifications</li>
-                    <li>Offer convenient and express delivery options</li>
-                    <li>Communicate with you via phone, email, chat, or WhatsApp</li>
-                    <li>Provide customer support and resolve issues</li>
-                    <li>Verify identity using valid documents (Aadhaar, PAN, Driving License, etc.)</li>
-                    <li>Conduct customer satisfaction surveys</li>
-                    <li>Personalize your experience and recommend tailored services</li>
-                    <li>Develop and improve products, features, and technology</li>
-                    <li>Perform market analysis, financial analysis, and service optimization</li>
-                    <li>Prevent fraud, secure networks, and manage business risks</li>
-                    <li>Comply with legal and regulatory obligations (e.g., GST, customs)</li>
-                  </ul>
-                </div>
-              )}
-            </section>
-
-            <section>
-              <button
-                onClick={() => toggleSection('data-share')}
-                className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
-              >
-                <h2 className="text-2xl font-semibold text-foreground">4. Why and With Whom We Share Data</h2>
-                {expandedSections['data-share'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-              </button>
-              {expandedSections['data-share'] && (
-                <div className="pl-4 pb-4">
-                  <p className="mb-4">We do not sell your data. However, we may share it in the following situations:</p>
+                  <p className="mb-4">We may share your information only in the following cases:</p>
                   <ul className="list-disc list-inside space-y-2">
-                    <li><strong>Jiffy Group Companies:</strong> For service delivery and process optimization.</li>
-                    <li><strong>Regulatory/Government Authorities:</strong> To comply with legal requirements.</li>
-                    <li><strong>Google Analytics:</strong> To monitor website usage and improve user experience (you may opt out via Google's browser add-on).</li>
-                    <li><strong>Third Party Vendors/Consultants/Marketers:</strong> For services like delivery, payment processing, hosting, customer support, KYC validation, surveys, and marketing campaigns. These vendors are contractually bound to secure your data.</li>
+                    <li><strong>With Courier Partners:</strong> To process shipments, assign orders, and update tracking information.</li>
+                    <li><strong>With Service Providers:</strong> Trusted third-party vendors who assist in hosting, analytics, or customer support, bound by confidentiality agreements.</li>
+                    <li><strong>For Legal Reasons:</strong> To comply with applicable laws, regulations, or government requests.</li>
                   </ul>
-                  <p className="mt-4">
-                    Your data may be transferred internationally, but only where adequate safeguards are in place.
-                  </p>
-                </div>
-              )}
-            </section>
-
-            <section>
-              <button
-                onClick={() => toggleSection('data-retention')}
-                className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
-              >
-                <h2 className="text-2xl font-semibold text-foreground">5. Data Retention</h2>
-                {expandedSections['data-retention'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-              </button>
-              {expandedSections['data-retention'] && (
-                <div className="pl-4 pb-4">
-                  <p>
-                    We retain personal information only as long as necessary for the purposes outlined above and for legal, 
-                    accounting, or audit requirements. Non-personal/aggregated data may be retained indefinitely.
-                  </p>
                 </div>
               )}
             </section>
@@ -211,35 +107,34 @@ const Privacy = () => {
                 onClick={() => toggleSection('data-security')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">6. Data Security</h2>
+                <h2 className="text-2xl font-semibold text-foreground">Data Security</h2>
                 {expandedSections['data-security'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
               {expandedSections['data-security'] && (
                 <div className="pl-4 pb-4">
+                  <p className="mb-4">We implement industry-standard security measures to protect your information against unauthorized access, alteration, disclosure, or destruction.</p>
                   <ul className="list-disc list-inside space-y-2">
-                    <li>We employ strict administrative, technical, and physical safeguards to protect your data from unauthorized access, loss, or misuse.</li>
-                    <li>We comply with ISO 27001 standards.</li>
-                    <li>We regularly monitor application, infrastructure, and network security.</li>
-                    <li>You are responsible for keeping your account credentials (password, OTP, etc.) secure.</li>
-                    <li>For third-party linked services (e.g., payments, social media), please review their privacy policies separately, as Jiffy is not responsible for their practices.</li>
+                    <li>Encrypted communication (HTTPS/SSL).</li>
+                    <li>Secure access controls and authentication.</li>
+                    <li>Regular monitoring and auditing of systems.</li>
                   </ul>
+                  <p className="mt-4">Your PII and sensitive company data are handled with the highest level of confidentiality and care.</p>
                 </div>
               )}
             </section>
 
             <section>
               <button
-                onClick={() => toggleSection('children')}
+                onClick={() => toggleSection('data-retention')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">7. Children</h2>
-                {expandedSections['children'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                <h2 className="text-2xl font-semibold text-foreground">Data Retention</h2>
+                {expandedSections['data-retention'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
-              {expandedSections['children'] && (
+              {expandedSections['data-retention'] && (
                 <div className="pl-4 pb-4">
                   <p>
-                    Our Services are not intended for individuals under 18. If you are under 18, you may only use our Services 
-                    under parental or guardian supervision.
+                    We retain your information only as long as necessary to provide our services and fulfill legal obligations. You may request deletion of your data by contacting us at support@jiffy.world.
                   </p>
                 </div>
               )}
@@ -247,56 +142,63 @@ const Privacy = () => {
 
             <section>
               <button
-                onClick={() => toggleSection('user-rights')}
+                onClick={() => toggleSection('your-rights')}
                 className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
               >
-                <h2 className="text-2xl font-semibold text-foreground">8. Your Rights as a Data Subject</h2>
-                {expandedSections['user-rights'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+                <h2 className="text-2xl font-semibold text-foreground">Your Rights</h2>
+                {expandedSections['your-rights'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
               </button>
-              {expandedSections['user-rights'] && (
+              {expandedSections['your-rights'] && (
                 <div className="pl-4 pb-4">
-                  <p className="mb-4">Depending on your location and applicable laws, you may have the right to:</p>
-                  <ul className="list-disc list-inside space-y-1 mb-4">
-                    <li>Access the personal data we hold about you</li>
-                    <li>Request correction or completion of inaccurate data</li>
-                    <li>Request deletion of your personal data (subject to legal exceptions)</li>
-                    <li>Restrict processing of your data</li>
-                    <li>Report data breaches at hello@jiffy.world</li>
-                    <li>Opt out of marketing communications anytime</li>
+                  <p className="mb-4">As a user, you have the right to:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Access and review your personal data.</li>
+                    <li>Request correction or deletion of information.</li>
+                    <li>Restrict or object to certain processing activities.</li>
+                    <li>Withdraw consent at any time, subject to legal obligations.</li>
                   </ul>
-                  <p>We will verify your identity before fulfilling any requests.</p>
                 </div>
               )}
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Changes to This Privacy Policy</h2>
+              <button
+                onClick={() => toggleSection('children-privacy')}
+                className="flex items-center justify-between w-full text-left p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors mb-4"
+              >
+                <h2 className="text-2xl font-semibold text-foreground">Children's Privacy</h2>
+                {expandedSections['children-privacy'] ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+              </button>
+              {expandedSections['children-privacy'] && (
+                <div className="pl-4 pb-4">
                   <p>
-                    Jiffy may update this Privacy Policy periodically. Any changes will be posted on this page and become 
-                    effective immediately upon posting.
+                    Our services are intended for businesses and not directed toward children under 18. We do not knowingly collect information from minors.
                   </p>
+                </div>
+              )}
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-foreground mb-4">Consent</h2>
-                  <p>
-                    By using our website, apps, or Services, you consent to this Privacy Policy and our Cookie Policy. 
-                    You will also be asked to review and accept these policies when creating an account.
-                  </p>
+              <h2 className="text-2xl font-semibold text-foreground mb-4">Changes to this Policy</h2>
+              <p>
+                We may update this Privacy Policy from time to time. Any significant changes will be notified via our website or email before they take effect.
+              </p>
             </section>
 
             <section>
               <h2 className="text-2xl font-semibold text-foreground mb-4">Contact Us</h2>
-                  <p className="mb-4">
-                    If you have any questions about this Privacy Policy or how your data is used, please contact our Privacy Officer at:
-                  </p>
-                  <p className="mb-4">
-                    📧 <a href="mailto:hello@jiffy.world" className="text-primary hover:underline">Hello@jiffy.world</a>
-                  </p>
-                  <p className="text-sm">
-                    (Please note: This email is strictly for privacy-related concerns. For order-related queries, please raise a 
-                    ticket via our Customer Support Desk at Jiffy Support Page).
-                  </p>
+              <p className="mb-4">
+                If you have any questions, concerns, or requests regarding this Privacy Policy, please contact us at:
+              </p>
+              <p className="mb-2">
+                <strong>Jiffy World</strong> (operated by Reset Supply Chain Private Limited)
+              </p>
+              <p className="mb-2">
+                📧 <a href="mailto:support@jiffy.world" className="text-primary hover:underline">support@jiffy.world</a>
+              </p>
+              <p>
+                🌐 <a href="https://jiffy.world" className="text-primary hover:underline">https://jiffy.world</a>
+              </p>
             </section>
           </div>
         </div>

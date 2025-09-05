@@ -14,7 +14,8 @@ const Terms = () => {
             <p className="text-muted-foreground leading-relaxed">
               These Terms & Conditions of Use govern your use of Jiffy's platforms, including jiffy.com, 
               direct.jiffy.com, the Jiffy Direct Mobile App, and the Jiffy Partner Mobile App (together, 
-              the "Applications"). The Applications are owned and operated by Jiffy Limited ("Jiffy," "we," or "us").
+              the "Applications"). The Applications are owned and operated by Reset Supply Chain Private Limited, 
+              operating under the brand name Jiffy World ("Jiffy,""Jiffy World," "we," or "us").
             </p>
           </section>
 
