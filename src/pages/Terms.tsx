@@ -132,9 +132,12 @@ const Terms = () => {
 
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-foreground mb-4">13. Privacy Policy</h2>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed mb-4">
               Your data is collected and processed as outlined in our Privacy Policy, which explains what information we collect, 
               why, and how it is used.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              We are committed to protecting your Personally Identifiable Information (PII) and sensitive business data. All information is collected, stored, and used as described in our Privacy Policy. By using our services, you consent to such processing.
             </p>
           </section>
 
