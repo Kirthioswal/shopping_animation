@@ -83,12 +83,12 @@ const Header = () => {
             >
               Log in
             </Button> */}
-            {/* <Button 
+            <Button 
               className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
               onClick={() => window.open('https://my.jiffy.world/signup', '_blank')}
             >
               Get Started
-            </Button> */}
+            </Button>
           </div>
         </div>
       </div>
