@@ -1,14 +1,91 @@
+# Jiffy Landing Website - All Crawlers Welcome
+# This file allows all legitimate crawlers to access all content
+
+# Google Search Engine
 User-agent: Googlebot
 Allow: /
 
+# Google Image Search
+User-agent: Googlebot-Image
+Allow: /
+
+# Google News
+User-agent: Googlebot-News
+Allow: /
+
+# Microsoft Bing Search Engine
 User-agent: Bingbot
 Allow: /
 
+# Microsoft Bing Preview
+User-agent: BingPreview
+Allow: /
+
+# Twitter/X Social Media
 User-agent: Twitterbot
 Allow: /
 
+# Facebook Social Media
 User-agent: facebookexternalhit
 Allow: /
 
+# LinkedIn Social Media
+User-agent: LinkedInBot
+Allow: /
+
+# WhatsApp Social Media
+User-agent: WhatsApp
+Allow: /
+
+# Telegram Social Media
+User-agent: TelegramBot
+Allow: /
+
+# Discord Social Media
+User-agent: Discordbot
+Allow: /
+
+# Slack Social Media
+User-agent: Slackbot
+Allow: /
+
+# DuckDuckGo Search Engine
+User-agent: DuckDuckBot
+Allow: /
+
+# Yandex Search Engine
+User-agent: YandexBot
+Allow: /
+
+# Baidu Search Engine
+User-agent: Baiduspider
+Allow: /
+
+# Yahoo Search Engine
+User-agent: Slurp
+Allow: /
+
+# Apple Siri/Spotlight
+User-agent: Applebot
+Allow: /
+
+# SEO Tools
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: SemrushBot
+Allow: /
+
+User-agent: MJ12bot
+Allow: /
+
+# Archive.org Wayback Machine
+User-agent: ia_archiver
+Allow: /
+
+# All other crawlers - Universal permission
 User-agent: *
 Allow: /
+
+# Sitemap location (uncomment when sitemap is available)
+# Sitemap: https://jiffy.world/sitemap.xml
