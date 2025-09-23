@@ -87,5 +87,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Sitemap location (uncomment when sitemap is available)
-# Sitemap: https://jiffy.world/sitemap.xml
+# Sitemap location
+Sitemap: https://jiffy.world/sitemap.xml

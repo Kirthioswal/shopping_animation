@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:snap": "vite build && react-snap",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -76,9 +77,60 @@
     "globals": "^15.15.0",
     "lovable-tagger": "^1.1.9",
     "postcss": "^8.5.6",
+    "react-snap": "^1.23.0",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite": "^5.4.19"
+  },
+  "reactSnap": {
+    "source": "dist",
+    "minifyHtml": {
+      "collapseWhitespace": false,
+      "removeComments": false,
+      "removeRedundantAttributes": false,
+      "removeScriptTypeAttributes": false,
+      "removeStyleLinkTypeAttributes": false,
+      "useShortDoctype": true,
+      "minifyCSS": false,
+      "minifyJS": false
+    },
+    "include": [
+      "/",
+      "/about",
+      "/privacy",
+      "/terms"
+    ],
+    "skipThirdPartyRequests": true,
+    "cacheAjaxRequests": false,
+    "preconnectThirdParty": false,
+    "inlineCss": false,
+    "fixWebpackChunksIssue": true,
+    "removeBlobs": true,
+    "fixInsertRule": true,
+    "asyncScriptTags": true,
+    "preloadImages": false,
+    "crawl": true,
+    "userAgent": "ReactSnap",
+    "waitFor": 2000,
+    "viewport": {
+      "width": 1200,
+      "height": 800
+    },
+    "puppeteerArgs": [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-accelerated-2d-canvas",
+      "--no-first-run",
+      "--no-zygote",
+      "--disable-gpu",
+      "--disable-web-security",
+      "--disable-features=VizDisplayCompositor"
+    ],
+    "puppeteerExecutablePath": null,
+    "concurrency": 1,
+    "removeStyleTags": false,
+    "removeScriptTags": false
   }
 }
