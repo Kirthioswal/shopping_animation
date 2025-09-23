@@ -126,7 +126,9 @@
       "--no-zygote",
       "--disable-gpu",
       "--disable-web-security",
-      "--disable-features=VizDisplayCompositor"
+      "--disable-features=VizDisplayCompositor",
+      "--js-flags=--harmony-optional-chaining",
+      "--js-flags=--harmony-nullish"
     ],
     "puppeteerExecutablePath": null,
     "concurrency": 1,
