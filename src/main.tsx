@@ -12,3 +12,4 @@ if (rootElement.hasChildNodes()) {
   // First-time render (development mode)
   createRoot(rootElement).render(<App />);
 }
+ 
