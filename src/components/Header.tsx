@@ -76,13 +76,13 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="flex items-center space-x-4">
-            {/* <Button 
-              variant="ghost" 
-              className="text-foreground hover:text-primary"
+            <Button 
+              variant="outline" 
+              className="border-primary text-primary hover:bg-primary hover:text-white transition-colors bg-transparent"
               onClick={() => window.open('https://my.jiffy.world/login', '_blank')}
             >
               Log in
-            </Button> */}
+            </Button>
             <Button 
               className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
               onClick={() => window.open('https://my.jiffy.world/signup', '_blank')}
