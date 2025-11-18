@@ -18,6 +18,11 @@ const Footer = () => {
                 >
                   Hello@jiffy.world
                 </a>
+                <a 
+                  className="text-foreground hover:text-primary transition-colors font-medium block"
+                >
+                  080-470-90884
+                </a>
               </div>
               <div>
                 <p className="text-muted-foreground text-sm mb-2 font-medium">Corporate Office Address:</p>
