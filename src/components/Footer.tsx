@@ -137,7 +137,7 @@ const Footer = () => {
               LinkedIn
             </a>
             <a 
-              href="https://github.com" 
+              href="https://www.facebook.com/jiffy.world/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
@@ -145,7 +145,7 @@ const Footer = () => {
               Facebook
             </a>
             <a 
-              href="https://www.instagram.com/jiffy.world" 
+              href="https://www.instagram.com/jiffy.world/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
