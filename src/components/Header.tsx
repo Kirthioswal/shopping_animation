@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -13,7 +14,13 @@ const Header = () => {
   };
 
   const handleHomeClick = () => {
-    navigate('/');
+    if (location.pathname === '/') {
+      // Already on homepage, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Navigate to homepage
+      navigate('/');
+    }
   };
 
   return (
@@ -29,7 +36,7 @@ const Header = () => {
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <div className="relative group">
-              <button 
+              <button
                 onClick={handleHomeClick}
                 className="text-foreground hover:text-primary transition-colors flex items-center space-x-1"
               >
@@ -39,9 +46,9 @@ const Header = () => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="relative group">
-              <button 
+              <button
                 onClick={() => scrollToSection('integration-section')}
                 className="text-foreground hover:text-primary transition-colors flex items-center space-x-1"
               >
@@ -51,16 +58,16 @@ const Header = () => {
                 </svg>
               </button>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => scrollToSection('ai-team-section')}
               className="text-foreground hover:text-primary transition-colors"
             >
               How it Works
             </button>
-            
+
             <div className="relative group">
-              <button 
+              <button
                 onClick={() => scrollToSection('faq-section')}
                 className="text-foreground hover:text-primary transition-colors flex items-center space-x-1"
               >
@@ -70,20 +77,20 @@ const Header = () => {
                 </svg>
               </button>
             </div>
-            
-            
+
+
           </nav>
 
           {/* CTA Buttons */}
           <div className="flex items-center space-x-4">
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="border-primary text-primary hover:bg-primary hover:text-white transition-colors bg-transparent"
               onClick={() => window.open('https://my.jiffy.world/login', '_blank')}
             >
               Log in
             </Button>
-            <Button 
+            <Button
               className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
               onClick={() => window.open('https://my.jiffy.world/signup', '_blank')}
             >
