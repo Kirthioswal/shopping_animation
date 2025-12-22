@@ -12,13 +12,13 @@ const Footer = () => {
             <div className="space-y-3">
               <div>
                 <p className="text-muted-foreground text-sm mb-1">Reach us at</p>
-                <a 
-                  href="mailto:Hello@jiffy.world" 
+                <a
+                  href="mailto:Hello@jiffy.world"
                   className="text-foreground hover:text-primary transition-colors font-medium"
                 >
                   Hello@jiffy.world
                 </a>
-                <a 
+                <a
                   className="text-foreground hover:text-primary transition-colors font-medium block"
                 >
                   080-470-90884
@@ -40,12 +40,20 @@ const Footer = () => {
             <h3 className="font-semibold text-foreground mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  to="/privacy"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  to="/terms"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   Terms and Conditions
                 </Link>
               </li>
@@ -99,7 +107,11 @@ const Footer = () => {
             <h3 className="font-semibold text-foreground mb-4">Company</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link
+                  to="/about"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   About Us
                 </Link>
               </li>
@@ -128,25 +140,25 @@ const Footer = () => {
             © 2024 Jiffy. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a 
-              href="https://www.linkedin.com/company/jiffyworld/about/" 
-              target="_blank" 
+            <a
+              href="https://www.linkedin.com/company/jiffyworld/about/"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               LinkedIn
             </a>
-            <a 
-              href="https://www.facebook.com/jiffy.world/" 
-              target="_blank" 
+            <a
+              href="https://www.facebook.com/jiffy.world/"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               Facebook
             </a>
-            <a 
-              href="https://www.instagram.com/jiffy.world/" 
-              target="_blank" 
+            <a
+              href="https://www.instagram.com/jiffy.world/"
+              target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >

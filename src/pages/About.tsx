@@ -16,7 +16,7 @@ const About = () => {
               About Us
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Reimagining logistics for the era of instant commerce. From dark stores to doorsteps, 
+              Reimagining logistics for the era of instant commerce. From dark stores to doorsteps,
               we make quick commerce logistics effortless.
             </p>
           </div>
@@ -33,12 +33,12 @@ const About = () => {
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardContent className="p-8">
                 <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                  At Jiffy, we're reimagining logistics for the era of instant commerce. From dark stores to doorsteps, 
+                  At Jiffy, we're reimagining logistics for the era of instant commerce. From dark stores to doorsteps,
                   we make quick commerce logistics effortless — helping businesses deliver products to their customers in record time.
                 </p>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  Our platform is built to empower brands of all sizes, whether you're processing 10 orders or 10,000. 
-                  With intelligent automation, powerful integrations, and real-time analytics, Jiffy ensures that your 
+                  Our platform is built to empower brands of all sizes, whether you're processing 10 orders or 10,000.
+                  With intelligent automation, powerful integrations, and real-time analytics, Jiffy ensures that your
                   logistics operations run smoother, faster, and smarter.
                 </p>
               </CardContent>
@@ -142,7 +142,7 @@ const About = () => {
                   <h3 className="text-2xl font-bold">Our Mission</h3>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  To power quick commerce logistics by combining speed, simplicity, and intelligence — 
+                  To power quick commerce logistics by combining speed, simplicity, and intelligence —
                   so that businesses can focus on growth while we handle the movement.
                 </p>
               </CardContent>
@@ -194,7 +194,11 @@ const About = () => {
               <p className="text-2xl font-bold bg-gradient-to-r from-primary to-orange-500 bg-clip-text text-transparent mb-8">
                 Need it now? Get it in a Jiffy.
               </p>
-              <Button size="lg" className="bg-gradient-to-r from-primary to-orange-500 hover:from-primary/90 hover:to-orange-500/90">
+              <Button
+                size="lg"
+                className="bg-gradient-to-r from-primary to-orange-500 hover:from-primary/90 hover:to-orange-500/90"
+                onClick={() => window.location.href = 'https://my.jiffy.world/signup'}
+              >
                 Get Started Today
               </Button>
             </div>
@@ -210,8 +214,8 @@ const About = () => {
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardContent className="p-8">
                 <div className="mb-6">
-                  <a 
-                    href="mailto:Hello@jiffy.world" 
+                  <a
+                    href="mailto:Hello@jiffy.world"
                     className="text-2xl font-semibold text-primary hover:text-primary/80 transition-colors"
                   >
                     Hello@jiffy.world
