@@ -224,9 +224,10 @@ const About = () => {
                 <div>
                   <p className="text-sm text-muted-foreground mb-2 font-medium">Corporate Office Address:</p>
                   <p className="text-muted-foreground leading-relaxed">
-                    3rd Floor, JMD Empire Square,<br />
-                    Mehrauli-Gurgaon Rd,<br />
-                    Gurugram, Haryana 122001
+                    3rd Floor, Spring House Workspaces,<br />
+                    JMD Regent Arcade mall, A Block,<br />
+                    DLF Phase 1, Sector 28,<br />
+                    Gurugram, Haryana 122002
                   </p>
                 </div>
               </CardContent>
