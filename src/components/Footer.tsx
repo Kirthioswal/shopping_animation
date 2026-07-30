@@ -21,7 +21,7 @@ const Footer = () => {
                 <a
                   className="text-foreground hover:text-primary transition-colors font-medium block"
                 >
-                  080-470-90884
+                  011-411-85353
                 </a>
               </div>
               <div>
