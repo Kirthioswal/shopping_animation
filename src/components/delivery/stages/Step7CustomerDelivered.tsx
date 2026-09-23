@@ -9,21 +9,25 @@ import {
   UserCheck,
 } from 'lucide-react';
 import astronautCourierPartnerImg from '@/assets/astronaut/astronaut-courier-partner.jpg';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step7Props {
   progress: number; // 0 to 1 for this step
 }
 
 export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+
   // ─── SCROLL PACING & CHOREOGRAPHY (LEFT -> CENTER -> RIGHT) ───
-  // 0.00 → 0.25: Package arrives from LEFT (-35vw) toward CENTER (0vw)
+  // 0.00 → 0.25: Package arrives from LEFT (LEFT_POSITION) toward CENTER (0)
   //              Delivery person becomes visible on RIGHT side.
   //              Status: "Out for Delivery"
   // 0.25 → 0.60: CENTER STORY MOMENT (35% generous dwell zone)
-  //              Package held fully visible at CENTER (0vw).
+  //              Package held fully visible at CENTER (0).
   //              Status: "Arriving at your doorstep"
   //              Delivery interaction staged.
-  // 0.60 → 0.75: Package continues from CENTER (0vw) toward RIGHT (+26vw).
+  // 0.60 → 0.75: Package continues from CENTER (0) toward RIGHT (customer handover).
   //              Delivery person moves to meet the package in handover motion.
   //              Interaction: Delivery Person → Package → Customer.
   // 0.75 → 1.00: FINAL "DELIVERED ✓" MOMENT & BREATHING ROOM (25% hold)
@@ -31,28 +35,25 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
   //              Package gently scales up with subtle highlight glow.
   //              Clean final confirmation "Delivered ✓" appears.
 
-  // Quintic smootherstep for C2-continuous motion (zero jerk, zero velocity at boundaries)
-  const smootherstep = (t: number) => {
-    const c = Math.max(0, Math.min(1, t));
-    return c * c * c * (c * (c * 6 - 15) + 10);
-  };
-
   const isAtCenter = progress >= 0.22 && progress <= 0.60;
   const isMovingToCustomer = progress > 0.60 && progress < 0.76;
   const isDelivered = progress >= 0.76;
 
-  // Package horizontal movement: LEFT (-35vw) → CENTER (0vw) → RIGHT (+26vw)
-  let packageX = 0;
+  // Final handover target point safely inside RIGHT zone
+  const customerTargetX = Math.round(coords.RIGHT_POSITION * 0.75);
+
+  // Package horizontal movement: LEFT (LEFT_POSITION) → CENTER (0) → RIGHT (customerTargetX)
+  let packageX = coords.CENTER_POSITION;
   if (progress < 0.22) {
     const t = progress / 0.22;
-    packageX = -35 * (1 - smootherstep(t)); // -35vw -> 0vw
+    packageX = coords.LEFT_POSITION * (1 - smootherstep(t));
   } else if (progress <= 0.60) {
-    packageX = 0; // CENTER DWELL
+    packageX = coords.CENTER_POSITION;
   } else if (progress < 0.76) {
     const t = (progress - 0.60) / 0.16;
-    packageX = 26 * smootherstep(t); // 0vw -> +26vw (to customer)
+    packageX = customerTargetX * smootherstep(t);
   } else {
-    packageX = 26; // Handed over to customer on RIGHT
+    packageX = customerTargetX; // Handed over to customer on RIGHT
   }
 
   // Subtle floating motion
@@ -155,8 +156,9 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
           Consistent with astronaut/courier style.
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute right-6 sm:right-10 lg:right-14 top-[58%] sm:top-[60%] -translate-y-1/2 z-20 pointer-events-auto max-w-xs sm:max-w-sm"
+        className="absolute right-6 sm:right-10 lg:right-14 -translate-y-1/2 z-20 pointer-events-auto max-w-xs sm:max-w-sm"
         style={{
+          top: coords.CENTER_Y,
           opacity: deliveryPersonOpacity,
           transform: `translate3d(${deliveryPersonX}px, -50%, 0)`,
           willChange: 'transform, opacity',
@@ -248,7 +250,7 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
       <div
         className="absolute z-30 transition-transform duration-75 ease-out"
         style={{
-          transform: `translate3d(${packageX}vw, ${packageY}px, 0)`,
+          transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
         }}
       >
@@ -282,8 +284,9 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
           ───────────────────────────────────────────────────────────── */}
       {isDelivered && (
         <div
-          className="absolute left-6 sm:left-12 lg:left-16 top-[58%] sm:top-[60%] -translate-y-1/2 w-[310px] sm:w-[380px] z-25 pointer-events-auto"
+          className="absolute left-6 sm:left-12 lg:left-16 -translate-y-1/2 w-[310px] sm:w-[380px] z-25 pointer-events-auto"
           style={{
+            top: coords.CENTER_Y,
             opacity: finalCardOpacity,
             transform: `translate3d(${finalCardX}px, -50%, 0)`,
             transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',

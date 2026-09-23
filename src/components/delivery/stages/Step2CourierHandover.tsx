@@ -14,17 +14,21 @@ import {
 import courierHandoverImg from '@/assets/journey/courier-handover.jpg';
 import courierPartnerImg from '@/assets/journey/courier-partner.jpg';
 import astronautCourierImg from '@/assets/astronaut/astronaut-courier-partner.jpg';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step2Props {
   progress: number; // 0 to 1 for this step
 }
 
 export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+
   // Step 2 contains two seamlessly connected scenes:
   //
   // ─── SCENE 1: 0:13 COURIER TRANSFER (progress 0.00 → 0.48) ───
   // • Message on LEFT: "Courier Transfer Book" (positioned safely below top HUD)
-  // • Package moves: RIGHT (+35vw) → CENTER (0vw) → LEFT (-35vw)
+  // • Package moves: RIGHT (RIGHT_POSITION) → CENTER (0) → LEFT (LEFT_POSITION)
   // • Central Transfer Dock visual with optical barcode scanning
   //
   // ─── SCENE 2: 0:17 COURIER PARTNER & ASTRONAUT COURIER (progress 0.48 → 1.00) ───
@@ -47,23 +51,17 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   const showTransferMessage = isPhase1 && p1 >= 0.28 && p1 <= 0.88;
   const isP1Scanning = isPhase1 && p1 >= 0.18 && p1 < 0.42;
 
-  // Quintic smootherstep for C2-continuous motion (zero jerk, zero velocity at boundaries)
-  const smootherstep = (t: number) => {
-    const c = Math.max(0, Math.min(1, t));
-    return c * c * c * (c * (c * 6 - 15) + 10);
-  };
-
-  let p1PackageX = 0;
+  let p1PackageX = coords.CENTER_POSITION;
   if (p1 < 0.20) {
     const t = p1 / 0.20;
-    p1PackageX = 35 * (1 - smootherstep(t)); // +35vw -> 0vw
+    p1PackageX = coords.RIGHT_POSITION * (1 - smootherstep(t));
   } else if (p1 <= 0.72) {
-    p1PackageX = 0; // CENTER DWELL
+    p1PackageX = coords.CENTER_POSITION;
   } else if (p1 < 0.88) {
     const t = (p1 - 0.72) / 0.16;
-    p1PackageX = -35 * smootherstep(t); // 0vw -> -35vw
+    p1PackageX = coords.LEFT_POSITION * smootherstep(t);
   } else {
-    p1PackageX = -35;
+    p1PackageX = coords.LEFT_POSITION;
   }
 
   let p1StationOpacity = 1;
@@ -93,20 +91,18 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   const isP2AtCenter = p2 >= 0.22 && p2 <= 0.76;
   const isAcceptedByCourierPartner = p2 >= 0.36;
 
-  // Package X position: LEFT (-35vw) → CENTER (0vw) → smoothly exits LEFT (-35vw) toward Warehouse Transit
-  let p2PackageX = 0;
+  // Package X position: LEFT (LEFT_POSITION) → CENTER (0) → smoothly exits LEFT (LEFT_POSITION) toward Warehouse Transit
+  let p2PackageX = coords.CENTER_POSITION;
   if (p2 < 0.22) {
     const t = p2 / 0.22;
-    p2PackageX = -35 * (1 - smootherstep(t)); // -35vw -> 0vw
+    p2PackageX = coords.LEFT_POSITION * (1 - smootherstep(t));
   } else if (p2 <= 0.74) {
-    // Focus position at CENTER with subtle breathing
-    p2PackageX = 0;
+    p2PackageX = coords.CENTER_POSITION;
   } else if (p2 < 0.92) {
-    // Continues smoothly toward LEFT (-35vw) to seamlessly enter Stage 3 (Warehouse) from LEFT
     const t = (p2 - 0.74) / 0.18;
-    p2PackageX = -35 * smootherstep(t); // 0vw -> -35vw
+    p2PackageX = coords.LEFT_POSITION * smootherstep(t);
   } else {
-    p2PackageX = -35; // securely at -35vw on LEFT
+    p2PackageX = coords.LEFT_POSITION;
   }
 
   // Existing Courier Partner panel on RIGHT side (kept in position, "Leo" removed)
@@ -304,8 +300,9 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
           ───────────────────────────────────────────────────────────── */}
       {isPhase2 && (
         <div
-          className="absolute left-6 sm:left-12 lg:left-24 top-[56%] -translate-y-1/2 z-20 pointer-events-auto"
+          className="absolute left-6 sm:left-12 lg:left-24 -translate-y-1/2 z-20 pointer-events-auto"
           style={{
+            top: coords.CENTER_Y,
             opacity: astronautCourierOpacity,
             transform: `translate3d(${astronautCourierX}px, -50%, 0)`,
             willChange: 'transform, opacity',
@@ -357,8 +354,9 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
           ───────────────────────────────────────────────────────────── */}
       {isPhase2 && (
         <div
-          className="absolute right-6 sm:right-10 lg:right-14 top-[56%] -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm"
+          className="absolute right-6 sm:right-10 lg:right-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm"
           style={{
+            top: coords.CENTER_Y,
             opacity: courierPartnerOpacity,
             transform: `translate3d(${courierPartnerX}px, -50%, 0)`,
             willChange: 'transform, opacity',
@@ -465,7 +463,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
       <div
         className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
         style={{
-          transform: `translate3d(${currentPackageX}vw, ${packageY}px, 0)`,
+          transform: `translate3d(${currentPackageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
         }}
       >

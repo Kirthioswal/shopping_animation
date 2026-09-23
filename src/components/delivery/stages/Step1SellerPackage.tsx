@@ -3,19 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DeliveryPackage } from '../DeliveryPackage';
 import { CheckCircle2, ShieldCheck, ArrowLeft, Box } from 'lucide-react';
 import astronautPackingImg from '@/assets/astronaut/astronaut-front.png';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step1Props {
   progress: number; // 0 to 1 for this step
 }
 
 export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+
   // Pacing sequence:
   // 0.00 → 0.16: Astronaut + package appears at center
   // 0.16 → 0.36: Astronaut packs package (active packing state)
   // 0.36 → 0.46: Package gets sealed (sealing tape applied, seal confirmation flash)
   // 0.46 → 0.52: "Order Packed and Sealed" appears in UPPER-RIGHT area
   // 0.52 → 0.78: Brief visual hold (storytelling moment, generous dwell zone)
-  // 0.78 → 0.90: Package proceeds toward RIGHT (+32vw) to Courier Handover; Astronaut station fades
+  // 0.78 → 0.90: Package proceeds toward RIGHT to Courier Handover; Astronaut station fades
   // 0.90 → 1.00: Breathing space before Stage 2
 
   const isPackingPhase = progress < 0.34;
@@ -27,12 +31,6 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
   const zoomSubProgress = isZoomPhase
     ? Math.min(Math.max((progress - 0.34) / 0.35, 0), 1)
     : 0;
-
-  // Quintic smootherstep for C2-continuous motion (zero jerk, zero velocity at boundaries)
-  const smootherstep = (t: number) => {
-    const c = Math.max(0, Math.min(1, t));
-    return c * c * c * (c * (c * 6 - 15) + 10);
-  };
 
   // Scale: 1.0 -> subtle zoom 1.15 when sealed and held -> 1.0
   let packageScale = 1;
@@ -57,7 +55,7 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
   if (progress < 0.08) {
     const t = progress / 0.08;
     const s = smootherstep(t);
-    workstationX = -8 * (1 - s);
+    workstationX = -Math.round(coords.viewportWidth * 0.01) * (1 - s);
     workstationOpacity = 0.85 + s * 0.15;
   } else if (progress <= 0.76) {
     workstationX = 0;
@@ -65,20 +63,20 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
   } else if (progress < 0.90) {
     const t = (progress - 0.76) / 0.14;
     const s = smootherstep(t);
-    workstationX = -s * 15;
+    workstationX = -s * Math.round(coords.viewportWidth * 0.02);
     workstationOpacity = Math.max(0, 1 - s * 1.4);
   } else {
     workstationOpacity = 0;
-    workstationX = -15;
+    workstationX = -Math.round(coords.viewportWidth * 0.02);
   }
 
   // Package X position:
   // Held in center beside astronaut during 0.16 -> 0.76
-  // Glides smoothly toward RIGHT (0vw -> +35vw) during 0.76 -> 0.92 to seamlessly hand over to Stage 2
-  let packageExitX = 0;
+  // Glides smoothly toward RIGHT (CENTER_POSITION -> RIGHT_POSITION) during 0.76 -> 0.92 to seamlessly hand over to Stage 2
+  let packageExitX = coords.CENTER_POSITION;
   if (progress > 0.76) {
     const t = Math.min((progress - 0.76) / 0.16, 1);
-    packageExitX = 35 * smootherstep(t);
+    packageExitX = coords.RIGHT_POSITION * smootherstep(t);
   }
 
   const packageY = Math.sin(progress * Math.PI) * -8;
@@ -146,7 +144,7 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
       <div
         className="relative z-30 flex flex-col md:flex-row items-center justify-center gap-5 sm:gap-7 lg:gap-8 max-w-5xl mx-auto px-4 pointer-events-auto"
         style={{
-          transform: `translate3d(${workstationX}vw, ${packageY}px, 0)`,
+          transform: `translate3d(${workstationX}px, ${packageY}px, 0)`,
           opacity: workstationOpacity,
           willChange: 'transform, opacity',
         }}
@@ -204,7 +202,7 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
         <div
           className="relative transition-transform duration-75 ease-out flex flex-col items-center"
           style={{
-            transform: `translate3d(${packageExitX}vw, 0, 0)`,
+            transform: `translate3d(${packageExitX}px, 0, 0)`,
             willChange: 'transform',
           }}
         >

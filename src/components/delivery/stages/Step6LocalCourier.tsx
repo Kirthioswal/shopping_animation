@@ -11,44 +11,42 @@ import {
   ArrowLeft,
 } from 'lucide-react';
 import packedDeliveryImg from '@/assets/journey/packed-delivery.jpg';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step6Props {
   progress: number; // 0 to 1 for this step
 }
 
 export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+
   // ─── SCROLL PACING & CHOREOGRAPHY (RIGHT -> CENTER -> LEFT) ───
-  // 0.00 → 0.22: Package arrives from Regional Hub (RIGHT: +35vw) toward CENTER (0vw)
+  // 0.00 → 0.22: Package arrives from Regional Hub (RIGHT: RIGHT_POSITION) toward CENTER (0)
   // 0.22 → 0.72: CENTER STORY MOMENT (50% generous dwell zone)
-  //              • Package held fully visible at CENTER (0vw)
+  //              • Package held fully visible at CENTER (0)
   //              • "Packed Delivery" message revealed on LEFT side
   //              • Delivery/packing confirmation & Rider Marco details active
   //              • Packing inspection & dispatch verified
-  // 0.72 → 0.88: Package visibly continues from CENTER (0vw) toward LEFT (-35vw) toward Packed Delivery hub
-  // 0.88 → 1.00: Package reaches LEFT (-35vw), breathing space before Stage 7 (Customer Doorstep) begins
-
-  // Quintic smootherstep for C2-continuous motion (zero jerk, zero velocity at boundaries)
-  const smootherstep = (t: number) => {
-    const c = Math.max(0, Math.min(1, t));
-    return c * c * c * (c * (c * 6 - 15) + 10);
-  };
+  // 0.72 → 0.88: Package visibly continues from CENTER (0) toward LEFT (LEFT_POSITION) toward Packed Delivery hub
+  // 0.88 → 1.00: Package reaches LEFT (LEFT_POSITION), breathing space before Stage 7 (Customer Doorstep) begins
 
   const isAtCenter = progress >= 0.22 && progress <= 0.72;
   const isPackedAndConfirmed = progress >= 0.32;
   const isAssignedToRider = progress >= 0.45;
 
-  // Package horizontal movement: RIGHT (+35vw) → CENTER (0vw) → LEFT (-35vw)
-  let packageX = 0;
+  // Package horizontal movement: RIGHT (RIGHT_POSITION) → CENTER (0) → LEFT (LEFT_POSITION)
+  let packageX = coords.CENTER_POSITION;
   if (progress < 0.22) {
     const t = progress / 0.22;
-    packageX = 35 * (1 - smootherstep(t)); // +35vw -> 0vw
+    packageX = coords.RIGHT_POSITION * (1 - smootherstep(t));
   } else if (progress <= 0.72) {
-    packageX = 0; // CENTER DWELL
+    packageX = coords.CENTER_POSITION;
   } else if (progress < 0.90) {
     const t = (progress - 0.72) / 0.18;
-    packageX = -35 * smootherstep(t); // 0vw -> -35vw
+    packageX = coords.LEFT_POSITION * smootherstep(t);
   } else {
-    packageX = -35; // reaches LEFT
+    packageX = coords.LEFT_POSITION;
   }
 
   // Vertical gentle float
@@ -135,8 +133,9 @@ export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
           Positioned on the LEFT side of the screen
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute left-6 sm:left-10 lg:left-14 top-[60%] sm:top-[62%] -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
+        className="absolute left-6 sm:left-10 lg:left-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
         style={{
+          top: coords.CENTER_Y,
           opacity: panelOpacity,
           transform: `translate3d(${panelX}px, -50%, 0)`,
           willChange: 'transform, opacity',
@@ -278,7 +277,7 @@ export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
       <div
         className="absolute z-30 transition-transform duration-75 ease-out"
         style={{
-          transform: `translate3d(${packageX}vw, ${packageY}px, 0)`,
+          transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
         }}
       >

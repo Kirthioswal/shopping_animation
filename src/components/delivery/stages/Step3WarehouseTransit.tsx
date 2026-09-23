@@ -11,44 +11,42 @@ import {
   Radio,
 } from 'lucide-react';
 import warehouseImg from '@/assets/journey/warehouse-processing.jpg';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step3Props {
   progress: number; // 0 to 1 for this step
 }
 
 export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+
   // ─── SCROLL PACING & CHOREOGRAPHY ───
-  // 0.00 → 0.22: Package approaches from Courier (LEFT: -35vw) to CENTER (0vw)
+  // 0.00 → 0.22: Package approaches from Courier (LEFT: LEFT_POSITION) to CENTER (0)
   // 0.22 → 0.72: CENTER STORY MOMENT (50% generous dwell zone)
   //              • Package held fully visible at CENTER
   //              • "Processing in Warehouse" revealed on RIGHT side
   //              • "Connect Logistics Warehouse" box & visual active
   //              • Scanning lasers and conveyor telemetry active
-  // 0.72 → 0.88: Package continues from CENTER (0vw) toward RIGHT (+35vw) into the warehouse
+  // 0.72 → 0.88: Package continues from CENTER (0) toward RIGHT (RIGHT_POSITION) into the warehouse
   // 0.88 → 1.00: Brief hold & small breathing space before Stage 4 (Air Cargo) begins
-
-  // Quintic smootherstep for C2-continuous motion (zero jerk, zero velocity at boundaries)
-  const smootherstep = (t: number) => {
-    const c = Math.max(0, Math.min(1, t));
-    return c * c * c * (c * (c * 6 - 15) + 10);
-  };
 
   const isAtCenter = progress >= 0.22 && progress <= 0.72;
   const isProcessing = progress >= 0.28;
   const isEnteringWarehouse = progress > 0.72;
 
   // Package horizontal movement (LEFT -> CENTER -> RIGHT)
-  let packageX = 0;
+  let packageX = coords.CENTER_POSITION;
   if (progress < 0.22) {
     const t = progress / 0.22;
-    packageX = -35 * (1 - smootherstep(t)); // -35vw -> 0vw
+    packageX = coords.LEFT_POSITION * (1 - smootherstep(t));
   } else if (progress <= 0.72) {
-    packageX = 0; // CENTER DWELL
+    packageX = coords.CENTER_POSITION;
   } else if (progress < 0.90) {
     const t = (progress - 0.72) / 0.18;
-    packageX = 35 * smootherstep(t); // 0vw -> +35vw
+    packageX = coords.RIGHT_POSITION * smootherstep(t);
   } else {
-    packageX = 35; // entered warehouse on right
+    packageX = coords.RIGHT_POSITION;
   }
 
   // Vertical floating bobbing
@@ -131,8 +129,9 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
             "Connect Logistics Warehouse" (WAREHOUSE BOX & VISUAL BELOW)
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute right-6 sm:right-10 lg:right-14 top-[60%] sm:top-[62%] -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
+        className="absolute right-6 sm:right-10 lg:right-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
         style={{
+          top: coords.CENTER_Y,
           opacity: warehouseOpacity,
           transform: `translate3d(${warehouseX}px, -50%, 0)`,
           willChange: 'transform, opacity',
@@ -273,7 +272,7 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
       <div
         className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
         style={{
-          transform: `translate3d(${packageX}vw, ${packageY}px, 0)`,
+          transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
         }}
       >
