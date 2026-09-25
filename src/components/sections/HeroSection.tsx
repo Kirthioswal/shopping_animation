@@ -174,7 +174,7 @@ const HeroSection = () => {
   // narrower desktop widths.
   const initialPhoneOffset = isDesktop
     ? -Math.min(25, (viewportW - 320) / viewportW * 50)
-    : isTablet ? -30 : -22;
+    : isTablet ? -30 : viewportW < 400 ? -27 : -22;
 
   if (heroProgress < 0.08) {
     const t = heroProgress / 0.08;
@@ -349,7 +349,7 @@ const HeroSection = () => {
         <div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto"
           style={{
-            transform: `translate3d(${phoneX}vw, ${responsivePhoneY}px, 0) scale(${isPhoneViewport ? 0.62 : 1})`,
+            transform: `translate3d(${phoneX}vw, ${responsivePhoneY}px, 0) scale(${isPhoneViewport ? (viewportW < 400 ? 0.55 : 0.62) : 1})`,
             opacity: responsivePhoneOpacity,
             willChange: 'transform, opacity',
           }}

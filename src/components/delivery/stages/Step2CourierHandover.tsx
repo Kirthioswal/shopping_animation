@@ -45,21 +45,14 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // PHASE 1 VARIABLES (0:13 COURIER TRANSFER)
   // ─────────────────────────────────────────────────────────────
   const p1 = Math.min(Math.max(progress / 0.48, 0), 1);
-  const isP1AtCenter = p1 >= 0.68 && p1 <= 0.88;
-  const isP1HandoverComplete = p1 >= 0.36;
-  const showTransferMessage = isPhase1 && p1 >= 0.28 && p1 <= 0.88;
-  const isP1Scanning = isPhase1 && p1 >= 0.18 && p1 < 0.42;
+  const sellerPackageStartX = coords.RIGHT_POSITION - Math.round(coords.viewportWidth * 0.12);
+  const isP1AtHandover = p1 >= 0.82;
+  const isP1HandoverComplete = p1 >= 0.82;
+  const showTransferMessage = isPhase1 && p1 >= 0.28 && p1 <= 0.96;
+  const isP1Scanning = isPhase1 && p1 >= 0.62 && p1 < 0.88;
 
-  let p1PackageX = coords.CENTER_POSITION;
-  if (p1 < 0.20) {
-    const t = p1 / 0.20;
-    p1PackageX = coords.RIGHT_POSITION * (1 - smootherstep(t));
-  } else if (p1 <= 0.88) {
-    const t = (p1 - 0.20) / 0.68;
-    p1PackageX = coords.RIGHT_POSITION + (coords.LEFT_POSITION - coords.RIGHT_POSITION) * smootherstep(t);
-  } else {
-    p1PackageX = coords.LEFT_POSITION;
-  }
+  const handoverProgress = smootherstep(Math.min(p1 / 0.88, 1));
+  const p1PackageX = sellerPackageStartX + (coords.LEFT_POSITION - sellerPackageStartX) * handoverProgress;
 
   let p1StationOpacity = 1;
   let p1StationX = coords.LEFT_POSITION;
@@ -68,13 +61,13 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
     const s = smootherstep(t);
     p1StationOpacity = s;
     p1StationX = coords.LEFT_POSITION + (1 - s) * 20;
-  } else if (p1 <= 0.72) {
+  } else if (p1 <= 0.92) {
     p1StationOpacity = 1;
     p1StationX = coords.LEFT_POSITION;
-  } else if (p1 < 0.86) {
-    const t = (p1 - 0.72) / 0.14;
+  } else if (p1 < 1) {
+    const t = (p1 - 0.92) / 0.08;
     const s = smootherstep(t);
-    p1StationOpacity = Math.max(0, 1 - s * 1.3);
+    p1StationOpacity = 1 - s;
     p1StationX = coords.LEFT_POSITION - s * 15;
   } else {
     p1StationOpacity = 0;
@@ -85,22 +78,14 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // PHASE 2 VARIABLES (0:17 COURIER PARTNER & ASTRONAUT COURIER)
   // ─────────────────────────────────────────────────────────────
   const p2 = Math.min(Math.max((progress - 0.48) / 0.52, 0), 1);
-  const isP2AtCenter = p2 >= 0.22 && p2 <= 0.76;
+  const isP2AtCenter = false;
   const isAcceptedByCourierPartner = p2 >= 0.36;
+  const isLoadedOnTruck = p2 >= 0.66;
+  const truckLoadProgress = smootherstep(Math.min(Math.max((p2 - 0.48) / 0.18, 0), 1));
 
-  // Package X position: LEFT (LEFT_POSITION) → CENTER (0) → smoothly exits LEFT (LEFT_POSITION) toward Warehouse Transit
-  let p2PackageX = coords.CENTER_POSITION;
-  if (p2 < 0.22) {
-    const t = p2 / 0.22;
-    p2PackageX = coords.LEFT_POSITION * (1 - smootherstep(t));
-  } else if (p2 <= 0.74) {
-    p2PackageX = coords.CENTER_POSITION;
-  } else if (p2 < 0.92) {
-    const t = (p2 - 0.74) / 0.18;
-    p2PackageX = coords.LEFT_POSITION * smootherstep(t);
-  } else {
-    p2PackageX = coords.LEFT_POSITION;
-  }
+  // The courier catches the parcel in the left lane, loads it onto the truck,
+  // and the next warehouse scene carries it from left to right.
+  const p2PackageX = coords.LEFT_POSITION;
 
   // Existing Courier Partner panel on RIGHT side (kept in position, "Leo" removed)
   let courierPartnerOpacity = 0;
@@ -131,13 +116,13 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
     const s = smootherstep(t);
     astronautCourierOpacity = s;
     astronautCourierX = -25 + s * 25;
-  } else if (p2 >= 0.32 && p2 <= 0.76) {
+  } else if (p2 >= 0.32 && p2 <= 0.48) {
     astronautCourierOpacity = 1;
     astronautCourierX = 0;
-  } else if (p2 > 0.76 && p2 < 0.90) {
-    const t = (p2 - 0.76) / 0.14;
+  } else if (p2 > 0.48 && p2 < 0.64) {
+    const t = (p2 - 0.48) / 0.16;
     const s = smootherstep(t);
-    astronautCourierOpacity = Math.max(0, 1 - s * 1.3);
+    astronautCourierOpacity = 1 - s;
     astronautCourierX = -s * 20;
   } else {
     astronautCourierOpacity = 0;
@@ -145,22 +130,52 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
 
   // Unified Package parameters
   const currentPackageX = isPhase1 ? p1PackageX : p2PackageX;
-  const packageY = Math.sin(progress * Math.PI * 2) * -7;
+  const packageY = Math.sin(progress * Math.PI * 2) * -7 + (isPhase2 ? truckLoadProgress * 30 : 0);
   const currentPackageScale =
-    (isPhase1 && isP1AtCenter) || (isPhase2 && isP2AtCenter) ? 1.08 : 0.98;
+    (isPhase1 && isP1AtHandover) || (isPhase2 && isP2AtCenter) ? 1.08 : 0.98;
   const currentRotation =
     isPhase1
       ? isP1HandoverComplete
         ? Math.sin(p1 * Math.PI * 2) * -1.2
         : 0
       : isAcceptedByCourierPartner
-      ? Math.sin(p2 * Math.PI * 2) * 1.5
+      ? isLoadedOnTruck ? 0 : Math.sin(p2 * Math.PI * 2) * 1.5
       : 0;
 
   return (
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       {/* Ambient courier bay glow */}
       <div className="absolute inset-0 bg-radial-gradient from-emerald-500/10 via-black to-black pointer-events-none" />
+
+      {/* Waiting truck in the left lane; the parcel settles onto its cargo bed after courier acceptance. */}
+      {isPhase2 && p2 >= 0.36 && (
+        <div
+          className="absolute z-20 pointer-events-none"
+          style={{
+            left: coords.absoluteLeftX,
+            top: coords.CENTER_Y + 120,
+            opacity: smootherstep(Math.min((p2 - 0.36) / 0.18, 1)),
+            transform: 'translate3d(-50%, -50%, 0)',
+          }}
+        >
+          <div className="relative w-[205px] h-[74px] drop-shadow-[0_12px_20px_rgba(0,0,0,0.75)]">
+            <div className="absolute left-0 bottom-3 w-[128px] h-[48px] rounded-md border-2 border-orange-300/80 bg-gradient-to-b from-orange-500/90 to-orange-800/90 shadow-[inset_0_5px_8px_rgba(255,255,255,0.15)]">
+              <div className="absolute inset-x-2 top-2 h-1 border-t border-dashed border-orange-100/60" />
+              <div className="absolute inset-x-2 bottom-2 h-1 border-t border-dashed border-orange-100/60" />
+            </div>
+            <div className="absolute right-0 bottom-3 w-[72px] h-[42px] rounded-t-xl rounded-br-md border-2 border-orange-300/80 bg-gradient-to-b from-amber-400 to-orange-600">
+              <div className="absolute right-1.5 top-1.5 w-8 h-5 rounded-t-lg rounded-bl-sm bg-slate-950/85 border border-sky-200/50" />
+              <div className="absolute right-1 bottom-1.5 w-1.5 h-2 rounded-sm bg-yellow-100 shadow-[0_0_8px_rgba(254,240,138,0.8)]" />
+            </div>
+            <div className="absolute left-6 bottom-0 w-7 h-7 rounded-full border-[5px] border-slate-300 bg-slate-950" />
+            <div className="absolute right-5 bottom-0 w-7 h-7 rounded-full border-[5px] border-slate-300 bg-slate-950" />
+            <div className="absolute left-0 bottom-3 w-[205px] h-1 bg-orange-200/80" />
+          </div>
+          <div className="mt-1 text-center font-mono text-[9px] tracking-wider text-orange-200/90">
+            COURIER FLEET // LOADING PARCEL
+          </div>
+        </div>
+      )}
 
       {/* ─────────────────────────────────────────────────────────────
           1. 0:13 MESSAGE: "COURIER TRANSFER BOOK" (LEFT SIDE)
@@ -491,12 +506,12 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
                   ? 'Courier Transfer Booked ✓'
                   : 'Proceeding to Courier Partner ←'
                 : 'Scanning Barcode & Custody 🔍'
-              : p2 < 0.22
-              ? 'Approaching Courier Partner →'
+              : p2 < 0.36
+              ? 'At courier pickup point · ready to load'
+              : isLoadedOnTruck
+              ? 'Loaded on courier truck · To warehouse →'
               : isAcceptedByCourierPartner
-              ? p2 < 0.74
-                ? 'Courier Partner Accepted ✓'
-                : 'Departing to Sorting Terminal →'
+              ? 'Courier Partner Accepted · Loading truck'
               : 'Courier Partner Receiving... 📦'
           }
           badgeColor={

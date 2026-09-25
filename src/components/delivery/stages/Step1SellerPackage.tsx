@@ -49,7 +49,7 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
   }
 
   // Workstation container position & opacity:
-  // Holds the packing workstation in the left-side lane, then fades it out before the parcel exits right.
+  // Keep the seller in view while the parcel travels out from the station on the right.
   let workstationX = 0;
   let workstationOpacity = 1;
   if (progress < 0.08) {
@@ -57,14 +57,14 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
     const s = smootherstep(t);
     workstationX = -Math.round(coords.viewportWidth * 0.12) * (1 - s);
     workstationOpacity = 0.85 + s * 0.15;
-  } else if (progress <= 0.76) {
+  } else if (progress <= 0.92) {
     workstationX = -Math.round(coords.viewportWidth * 0.12);
     workstationOpacity = 1;
-  } else if (progress < 0.90) {
-    const t = (progress - 0.76) / 0.14;
+  } else if (progress < 1) {
+    const t = (progress - 0.92) / 0.08;
     const s = smootherstep(t);
-    workstationX = -Math.round(coords.viewportWidth * 0.12) - s * Math.round(coords.viewportWidth * 0.08);
-    workstationOpacity = Math.max(0, 1 - s * 1.4);
+    workstationX = -Math.round(coords.viewportWidth * 0.12) - s * Math.round(coords.viewportWidth * 0.04);
+    workstationOpacity = 1 - s;
   } else {
     workstationOpacity = 0;
     workstationX = -Math.round(coords.viewportWidth * 0.20);
