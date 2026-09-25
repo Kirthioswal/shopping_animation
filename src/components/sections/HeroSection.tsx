@@ -17,6 +17,7 @@ gsap.registerPlugin(ScrollTrigger);
  */
 const HeroSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const notificationAnchorRef = useRef<HTMLDivElement>(null);
 
   // Use ref for scroll progress to avoid re-renders on every scroll tick
   const progressRef = useRef(0);
@@ -155,6 +156,8 @@ const HeroSection = () => {
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024;
   const viewportW = typeof window !== 'undefined' ? window.innerWidth : 1024;
   const viewportH = typeof window !== 'undefined' ? window.innerHeight : 900;
+  const isTablet = viewportW >= 640 && viewportW < 1024;
+  const isPhoneViewport = viewportW < 640;
 
   // =========================================================================
   // SCENE 1: PHONE ORDER PLACING CHOREOGRAPHY (ENTER -> CENTER HOLD -> EXIT -> BREATHING)
@@ -167,7 +170,11 @@ const HeroSection = () => {
   // =========================================================================
   let phoneX = 0;
   let phoneOpacity = 1;
-  const initialPhoneOffset = isDesktop ? -16 : 0; // -16vw on desktop, 0 on mobile
+  // Preserve the desktop composition while keeping the phone fully in view on
+  // narrower desktop widths.
+  const initialPhoneOffset = isDesktop
+    ? -Math.min(16, (viewportW - 320) / viewportW * 50)
+    : isTablet ? -26 : 0;
 
   if (heroProgress < 0.08) {
     const t = heroProgress / 0.08;
@@ -185,13 +192,21 @@ const HeroSection = () => {
     phoneX = -24;
   }
 
+  // At phone widths, introduce the handset after the hero copy clears. At
+  // tablet widths it shares the opening frame with the copy in a left/right
+  // composition instead of covering the headline.
+  const mobileEnter = Math.min(Math.max(heroProgress / 0.14, 0), 1);
+  const mobileEnterEase = mobileEnter * mobileEnter * (3 - 2 * mobileEnter);
+  const responsivePhoneY = isPhoneViewport ? (1 - mobileEnterEase) * viewportH * 0.30 : 0;
+  const responsivePhoneOpacity = phoneOpacity * (isPhoneViewport ? mobileEnterEase : 1);
+
   // =========================================================================
   // ORIGINAL MESSAGE NOTIFICATION CHOREOGRAPHY (APPEAR -> CENTER HOLD -> FLIGHT)
   // 0.18 -> 0.22: MESSAGE POPS UP on top of phone (scale 0.6 -> 1.0, opacity 0 -> 1)
   // 0.22 -> 0.36: GENEROUS CENTER HOLD (Message clearly visible, storytelling moment)
   // 0.36 -> 0.50: Takes flight toward terminal on RIGHT (+26vw)
   // =========================================================================
-  const showNotification = heroProgress >= 0.18 && heroProgress <= 0.54;
+  const showNotification = heroProgress >= 0.18 && heroProgress <= 0.58;
 
   let notificationAppearScale = 1;
   let notificationAppearOpacity = 1;
@@ -213,13 +228,24 @@ const HeroSection = () => {
   }
 
   const flightProgress = Math.min(Math.max((heroProgress - 0.36) / 0.14, 0), 1);
-  const notificationFlightX = flightProgress * (isDesktop ? viewportW * 0.26 : Math.min(viewportW * 0.3, 140));
-  const notificationFlightY = Math.pow(flightProgress, 0.7) * (viewportH * 0.12);
+  const flightEase = flightProgress * flightProgress * (3 - 2 * flightProgress);
+  const originRect = notificationAnchorRef.current?.getBoundingClientRect();
+  const screenRect = typeof document !== 'undefined'
+    ? document.getElementById('terminal-computer-screen')?.getBoundingClientRect()
+    : undefined;
+  const notificationOriginX = originRect ? originRect.left + originRect.width / 2 : viewportW / 2;
+  const notificationOriginY = originRect ? originRect.top - (viewportW >= 640 ? 16 : 12) + 40 : viewportH / 2 - 210;
+  const notificationTargetX = screenRect ? screenRect.left + screenRect.width / 2 : viewportW / 2 + (isDesktop ? viewportW * 0.26 : Math.min(viewportW * 0.3, 140));
+  const notificationTargetY = screenRect ? screenRect.top + screenRect.height / 2 : notificationOriginY + viewportH * 0.12;
+  const notificationFlightX = flightEase * (notificationTargetX - notificationOriginX);
+  const notificationFlightY = flightEase * (notificationTargetY - notificationOriginY);
   const notificationFlightScale = flightProgress < 0.6
     ? 1 - flightProgress * 0.12
     : 1 - 0.6 * 0.12 - ((flightProgress - 0.6) / 0.4) * 0.35;
-  const notificationFlightOpacity = flightProgress > 0.88
-    ? Math.max(0, 1 - (flightProgress - 0.88) / 0.12)
+  // Dock on the actual monitor, hold through the terminal's final settle, and
+  // fade as the received-order state takes over at 0.58.
+  const notificationFlightOpacity = heroProgress > 0.55
+    ? Math.max(0, 1 - (heroProgress - 0.55) / 0.03)
     : 1;
 
   const totalNotificationX = notificationFlightX;
@@ -286,7 +312,7 @@ const HeroSection = () => {
           willChange: 'transform, opacity',
         }}
       >
-        <div className="w-full lg:w-[55%] text-center lg:text-left flex flex-col items-center lg:items-start lg:pl-6 pointer-events-auto">
+        <div className="w-full md:w-[55%] lg:w-[55%] text-center md:text-left flex flex-col items-center md:items-start md:pl-6 pointer-events-auto">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight tracking-tight min-h-[140px] sm:min-h-[180px] md:min-h-[220px]">
             {renderText()}
             {showCursor && (
@@ -299,7 +325,7 @@ const HeroSection = () => {
             effortless — delivering products to your customers in record time.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 w-full sm:w-auto">
             <Button
               className="bg-gradient-to-r from-[#F97316] to-[#FF6B35] text-white hover:opacity-90 transition-opacity text-lg px-8 py-6 rounded-xl font-semibold shadow-lg shadow-orange-500/20 w-full sm:w-auto"
               onClick={() => window.open('https://my.jiffy.world/signup', '_blank')}
@@ -318,12 +344,12 @@ const HeroSection = () => {
       </div>
 
       {/* LAYER 2: SECTION 1 PHONE ORDER PLACING (SIDE -> CENTER -> OTHER SIDE) */}
-      {phoneOpacity > 0.01 && (
+      {responsivePhoneOpacity > 0.01 && (
         <div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto"
           style={{
-            transform: `translate3d(${phoneX}vw, 0, 0)`,
-            opacity: phoneOpacity,
+            transform: `translate3d(${phoneX}vw, ${responsivePhoneY}px, 0)`,
+            opacity: responsivePhoneOpacity,
             willChange: 'transform, opacity',
           }}
         >
@@ -342,13 +368,13 @@ const HeroSection = () => {
           className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none"
         >
           <div className="relative pt-6 sm:pt-8">
-            <div className="relative w-[280px] sm:w-[310px] h-[500px] sm:h-[560px] max-h-[72vh] flex justify-center">
+              <div ref={notificationAnchorRef} className="relative w-[280px] sm:w-[310px] h-[500px] sm:h-[560px] max-h-[72vh] flex justify-center">
               <div
-                className="absolute -top-3 sm:-top-4 left-1/2 -translate-x-1/2 origin-center"
+                className="absolute -top-3 sm:-top-4 left-1/2 origin-center"
                 style={{
-                  width: '300px',
+                  width: 'min(300px, calc(100vw - 32px))',
                   willChange: 'transform, opacity',
-                  transform: `translate3d(${totalNotificationX}px, ${totalNotificationY}px, 0) scale(${totalNotificationScale})`,
+                  transform: `translate3d(calc(-50% + ${totalNotificationX}px), ${totalNotificationY}px, 0) scale(${totalNotificationScale})`,
                   opacity: totalNotificationOpacity,
                 }}
               >

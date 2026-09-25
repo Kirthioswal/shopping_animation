@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Package, Sparkles, Monitor, Cpu, Radio } from 'lucide-react';
-import astronautImg from '@/assets/astronaut/astronaut-computer-reading.jpg';
+import sellerAtComputerImg from '@/assets/astronaut/seller-at-computer.png';
+import packingImg from '@/assets/astronaut/astronaut-packing-focus.png';
+import packingCloseupImg from '@/assets/astronaut/astronaut-hands-box.png';
+import packedImg from '@/assets/journey/step-02-packed.png';
 
 interface DarkStoreTerminalProps {
   progress: number; // 0 to 1 scroll progress from HeroSection
@@ -9,6 +12,15 @@ interface DarkStoreTerminalProps {
 }
 
 export const DarkStoreTerminal = ({ progress, orderReceived }: DarkStoreTerminalProps) => {
+  // The packing sequence is scrubbed by the hero's scroll progress so every
+  // action can be revisited naturally when the user scrolls back.
+  const packingProgress = Math.min(Math.max((progress - 0.62) / 0.20, 0), 1);
+  const packingFrames = [sellerAtComputerImg, packingImg, packingCloseupImg, packedImg];
+  const packingFrame = Math.min(Math.floor(packingProgress * packingFrames.length), packingFrames.length - 1);
+  const packingLabels = ['Order received', 'Placing item in parcel', 'Sealing the package', 'Packed and ready'];
+  const packingPercent = Math.round(packingProgress * 100);
+  const arrivalProgress = Math.min(Math.max((progress - 0.50) / 0.08, 0), 1);
+  const isReceivingOrder = progress >= 0.50;
   return (
     <div className="relative w-full max-w-xl mx-auto rounded-3xl overflow-hidden border border-neutral-800/90 bg-neutral-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.8)] backdrop-blur-xl group">
       {/* Ambient workstation glow */}
@@ -31,26 +43,33 @@ export const DarkStoreTerminal = ({ progress, orderReceived }: DarkStoreTerminal
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
           <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
-            {orderReceived ? 'ORDER TRANSMITTED' : 'ONLINE // STANDBY'}
+            {orderReceived ? 'ORDER RECEIVED' : isReceivingOrder ? 'INCOMING ORDER' : 'ONLINE // STANDBY'}
           </span>
         </div>
       </div>
 
-      {/* Main Visual: Astronaut at Packing Station reading computer */}
+      {/* Main visual advances from order review through packing and sealing. */}
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-950">
-        <img
-          src={astronautImg}
-          alt="Astronaut teammate in dark store fulfillment center reading incoming order on computer"
-          className="w-full h-full object-cover object-center transform transition-transform duration-700 group-hover:scale-[1.02]"
-        />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.img
+            key={packingFrame}
+            src={packingFrames[packingFrame]}
+            alt={packingFrame === 0 ? 'Seller checking the incoming order at the workstation' : 'Seller packing and sealing the order'}
+            initial={{ opacity: 0, y: 10, scale: 1.015 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.99 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        </AnimatePresence>
 
         {/* Subtle dark vignette overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
 
         {/* Live Interactive Computer Monitor HUD (Overlays the computer area — sized to not obscure astronaut) */}
-        <div className="absolute top-[12%] right-[4%] w-[38%] sm:w-[36%] aspect-[1.3/1] z-20 pointer-events-none flex flex-col justify-between">
+        <div id="terminal-computer-screen" className="absolute top-[12%] right-[4%] w-[38%] sm:w-[36%] aspect-[1.3/1] z-20 pointer-events-none flex flex-col justify-between">
           <AnimatePresence mode="wait">
-            {!orderReceived ? (
+            {!isReceivingOrder ? (
               /* Standby / Listening Screen */
               <motion.div
                 key="standby-screen"
@@ -79,51 +98,63 @@ export const DarkStoreTerminal = ({ progress, orderReceived }: DarkStoreTerminal
                 </div>
               </motion.div>
             ) : (
-              /* Active Order Received Screen (Triggered when notification enters computer) */
+              /* Order details enrich in place as the notification lands. */
               <motion.div
-                key="received-screen"
-                initial={{ opacity: 0, scale: 0.85 }}
+                key="incoming-screen"
+                initial={{ opacity: 0, scale: 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 20 }}
-                className="w-full h-full rounded-xl bg-gradient-to-br from-neutral-950/95 via-neutral-900/95 to-neutral-950/95 border-2 border-emerald-500/70 p-2.5 flex flex-col justify-between backdrop-blur-md shadow-[0_0_30px_rgba(16,185,129,0.35)]"
+                className={`w-full h-full rounded-xl bg-gradient-to-br from-neutral-950/95 via-neutral-900/95 to-neutral-950/95 p-2.5 flex flex-col justify-between backdrop-blur-md transition-colors duration-200 ${orderReceived ? 'border-2 border-emerald-500/70 shadow-[0_0_30px_rgba(16,185,129,0.35)]' : 'border border-orange-400/70 shadow-[0_0_24px_rgba(249,115,22,0.25)]'}`}
               >
-                <div className="flex items-center justify-between border-b border-emerald-500/30 pb-1">
-                  <span className="text-[9px] font-mono text-emerald-400 font-extrabold flex items-center gap-1">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                    NEW ORDER #JFY-9082
+                <div className={`flex items-center justify-between border-b pb-1 ${orderReceived ? 'border-emerald-500/30' : 'border-orange-500/30'}`}>
+                  <span className={`text-[9px] font-mono font-extrabold flex items-center gap-1 ${orderReceived ? 'text-emerald-400' : 'text-orange-300'}`}>
+                    {orderReceived ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <Radio className="w-3 h-3 animate-pulse" />}
+                    {arrivalProgress < 0.45 ? 'ORDER ARRIVING' : 'NEW ORDER #JFY-9082'}
                   </span>
-                  <span className="text-[7.5px] font-mono text-emerald-300 bg-emerald-500/20 px-1 py-0.5 rounded font-bold">
-                    TRANSMITTED
+                  <span className={`text-[7.5px] font-mono px-1 py-0.5 rounded font-bold ${orderReceived ? 'text-emerald-300 bg-emerald-500/20' : 'text-orange-200 bg-orange-500/15'}`}>
+                    {orderReceived ? 'RECEIVED' : 'SYNCING'}
                   </span>
                 </div>
 
                 <div className="my-auto space-y-1 py-0.5">
-                  <div className="flex items-center justify-between text-[8px] font-mono">
+                  <div className="flex items-center justify-between text-[8px] font-mono" style={{ opacity: 0.35 + arrivalProgress * 0.65 }}>
                     <span className="text-neutral-400">Item:</span>
-                    <span className="text-white font-bold">Ultra Parcel Box</span>
+                    <span className="text-white font-bold">{arrivalProgress > 0.2 ? 'Ultra Parcel Box' : 'Receiving details…'}</span>
                   </div>
-                  <div className="flex items-center justify-between text-[8px] font-mono">
+                  <div className="flex items-center justify-between text-[8px] font-mono transition-opacity duration-200" style={{ opacity: Math.max(0, (arrivalProgress - 0.25) / 0.75) }}>
                     <span className="text-neutral-400">Target ETA:</span>
                     <span className="text-orange-400 font-bold">10 MINS</span>
                   </div>
-                  <div className="flex items-center justify-between text-[8px] font-mono">
+                  <div className="flex items-center justify-between text-[8px] font-mono transition-opacity duration-200" style={{ opacity: Math.max(0, (arrivalProgress - 0.5) / 0.5) }}>
                     <span className="text-neutral-400">Packer:</span>
                     <span className="text-cyan-400 font-bold">Astronaut Leo</span>
                   </div>
                 </div>
 
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded py-0.5 px-1.5 flex items-center justify-between">
-                  <span className="text-[7.5px] font-mono font-bold text-emerald-300 uppercase">
-                    Status: Packing in progress
+                <div className={`rounded py-0.5 px-1.5 flex items-center justify-between transition-colors duration-200 ${orderReceived ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-orange-500/10 border border-orange-500/30'}`}>
+                  <span className={`text-[7.5px] font-mono font-bold uppercase ${orderReceived ? 'text-emerald-300' : 'text-orange-200'}`}>
+                    Status: {orderReceived ? 'Ready to pack' : 'Waiting for order data'}
                   </span>
-                  <span className="text-[7.5px] text-emerald-400 font-bold animate-pulse">
-                    ● ACTIVE
+                  <span className={`text-[7.5px] font-bold animate-pulse ${orderReceived ? 'text-emerald-400' : 'text-orange-300'}`}>
+                    ● {orderReceived ? 'ACTIVE' : 'SYNCING'}
                   </span>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
+
+        {orderReceived && (
+          <div className="absolute top-[12%] left-[4%] z-20 w-[43%] rounded-xl border border-orange-400/45 bg-neutral-950/90 px-2.5 py-2 text-left shadow-lg backdrop-blur-md">
+            <div className="flex items-center justify-between gap-2 text-[8px] font-mono font-bold uppercase tracking-wide text-orange-300">
+              <span>Fulfillment</span><span>{packingPercent}%</span>
+            </div>
+            <p className="mt-1 text-[9px] font-semibold text-white">{packingLabels[packingFrame]}</p>
+            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-neutral-800">
+              <div className="h-full rounded-full bg-gradient-to-r from-orange-500 to-emerald-400" style={{ width: `${packingPercent}%` }} />
+            </div>
+          </div>
+        )}
 
         {/* Astronaut Speech/Status Tag */}
         <AnimatePresence>

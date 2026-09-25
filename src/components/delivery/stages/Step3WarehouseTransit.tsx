@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   Radio,
 } from 'lucide-react';
-import warehouseImg from '@/assets/journey/warehouse-processing.jpg';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
 import { smootherstep } from '@/utils/viewportCoordinates';
 
@@ -50,8 +49,14 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
   }
 
   // Vertical floating bobbing
-  const packageY = Math.sin(progress * Math.PI * 2) * -8;
-  const packageScale = isAtCenter ? 1.08 : 0.96;
+  const warehouseApproachProgress = Math.min(Math.max((progress - 0.72) / 0.18, 0), 1);
+  const warehouseEntryOffsetY = coords.CENTER_Y - coords.viewportHeight / 2;
+  const packageY = Math.sin(progress * Math.PI * 2) * -8 + smootherstep(warehouseApproachProgress) * warehouseEntryOffsetY;
+  // The final leg narrows into the visible warehouse bay; scale and fade only
+  // after the package has reached the doorway so it reads as entering it.
+  const entryProgress = progress > 0.78 ? Math.min((progress - 0.78) / 0.12, 1) : 0;
+  const packageScale = isAtCenter ? 1.08 : 0.96 - smootherstep(entryProgress) * 0.58;
+  const packageOpacity = 1 - smootherstep(entryProgress);
 
   // Right-side Warehouse Panel appearance
   let warehouseOpacity = 0;
@@ -227,13 +232,23 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
               SECTION 3: RELEVANT WAREHOUSE / LOGISTICS VISUAL
               Shows automated sortation conveyor, laser scanning, and packages
               ───────────────────────────────────────────────────────── */}
-          <div className="relative aspect-[16/10] w-full overflow-hidden bg-neutral-950">
-            <img
-              src={warehouseImg}
-              alt="Connect Logistics Warehouse package scanning and automated sortation lines"
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20 pointer-events-none" />
+          <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#111820]">
+            {/* Draw the receiving bay as a real scene element so the parcel can
+                travel into its doorway instead of disappearing over a photo. */}
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,#1b2630_0%,#26323b_54%,#0c1117_55%,#080b10_100%)]" />
+            <div className="absolute inset-x-[7%] top-[8%] h-[68%] border-x-4 border-t-4 border-slate-500/60 bg-[linear-gradient(90deg,#1b2730,#293943_48%,#101820)] shadow-[inset_0_0_35px_rgba(0,0,0,.8)]">
+              <div className="absolute left-[30%] right-[7%] top-[9%] bottom-0 border-x-[10px] border-t-[10px] border-slate-500/50 bg-[linear-gradient(90deg,#05090d,#17232b_45%,#070a0e)] shadow-[inset_0_0_28px_rgba(249,115,22,.2)]">
+                <div className="absolute inset-x-0 top-[18%] h-px bg-orange-200/40 shadow-[0_0_12px_3px_rgba(249,115,22,.3)]" />
+                <div className="absolute inset-x-0 bottom-0 h-2/5 bg-[repeating-linear-gradient(90deg,#4a5560_0px,#4a5560_5px,#151c22_5px,#151c22_12px)] opacity-80" />
+                <div className="absolute inset-y-0 left-0 w-2 bg-amber-400/70 shadow-[0_0_16px_rgba(251,191,36,.5)]" />
+              </div>
+              <div className="absolute left-[4%] top-[18%] bottom-0 w-[20%] flex flex-col justify-between border-x border-slate-600/50 px-1.5 py-1">
+                <span className="h-[2px] bg-slate-400/50" /><span className="h-[2px] bg-slate-400/50" /><span className="h-[2px] bg-slate-400/50" />
+              </div>
+            </div>
+            <div className="absolute inset-x-0 bottom-0 h-[27%] bg-[linear-gradient(170deg,#4b5660_0%,#222b32_18%,#090d12_70%)] [clip-path:polygon(0_36%,100%_0,100%_100%,0_100%)]" />
+            <div className="absolute bottom-[8%] left-[31%] right-[8%] h-[6%] rounded-sm bg-slate-500/50 shadow-[0_4px_8px_rgba(0,0,0,.6)]" />
+            <div className="absolute bottom-[14%] left-[31%] right-[8%] h-[2px] bg-orange-300/70 shadow-[0_0_10px_2px_rgba(249,115,22,.35)]" />
 
             {/* Laser scanning beam during processing */}
             {isProcessing && (
@@ -273,6 +288,7 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
         className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
+          opacity: packageOpacity,
           willChange: 'transform',
         }}
       >
@@ -335,4 +351,3 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
     </div>
   );
 };
-

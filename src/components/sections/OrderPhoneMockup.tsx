@@ -101,12 +101,8 @@ export const OrderPhoneMockup = ({
         <div className="relative flex-1 p-4 overflow-hidden flex flex-col justify-between">
           <AnimatePresence mode="wait">
             {orderStep === 0 && (
-              <motion.div
+              <div
                 key="step0"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.4 }}
                 className="flex-1 flex flex-col justify-between"
               >
                 {/* Product Details Card */}
@@ -180,7 +176,7 @@ export const OrderPhoneMockup = ({
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {orderStep === 1 && (
