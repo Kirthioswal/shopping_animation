@@ -21,32 +21,21 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
   const coords = useViewportCoordinates();
 
   // ─── SCROLL PACING & CHOREOGRAPHY ───
-  // 0.00 → 0.22: Package approaches from Courier (LEFT: LEFT_POSITION) to CENTER (0)
-  // 0.22 → 0.72: CENTER STORY MOMENT (50% generous dwell zone)
-  //              • Package held fully visible at CENTER
+  // 0.00 → 0.72: Package travels from the courier on LEFT across to the RIGHT-side bay
+  //              • Package keeps moving through the middle instead of stopping there
   //              • "Processing in Warehouse" revealed on RIGHT side
   //              • "Connect Logistics Warehouse" box & visual active
   //              • Scanning lasers and conveyor telemetry active
-  // 0.72 → 0.88: Package continues from CENTER (0) toward RIGHT (RIGHT_POSITION) into the warehouse
+  // 0.72 → 0.88: Package completes its rightward travel into the warehouse
   // 0.88 → 1.00: Brief hold & small breathing space before Stage 4 (Air Cargo) begins
 
-  const isAtCenter = progress >= 0.22 && progress <= 0.72;
+  const isAtCenter = false;
   const isProcessing = progress >= 0.28;
   const isEnteringWarehouse = progress > 0.72;
 
-  // Package horizontal movement (LEFT -> CENTER -> RIGHT)
-  let packageX = coords.CENTER_POSITION;
-  if (progress < 0.22) {
-    const t = progress / 0.22;
-    packageX = coords.LEFT_POSITION * (1 - smootherstep(t));
-  } else if (progress <= 0.72) {
-    packageX = coords.CENTER_POSITION;
-  } else if (progress < 0.90) {
-    const t = (progress - 0.72) / 0.18;
-    packageX = coords.RIGHT_POSITION * smootherstep(t);
-  } else {
-    packageX = coords.RIGHT_POSITION;
-  }
+  // The route runs straight from the courier's left-side lane into the receiving bay on the right.
+  const routeProgress = smootherstep(Math.min(progress / 0.88, 1));
+  const packageX = coords.LEFT_POSITION + (coords.RIGHT_POSITION - coords.LEFT_POSITION) * routeProgress;
 
   // Vertical floating bobbing
   const warehouseApproachProgress = Math.min(Math.max((progress - 0.72) / 0.18, 0), 1);

@@ -28,8 +28,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   //
   // ─── SCENE 1: 0:13 COURIER TRANSFER (progress 0.00 → 0.48) ───
   // • Message on LEFT: "Courier Transfer Book" (positioned safely below top HUD)
-  // • Package moves: RIGHT (RIGHT_POSITION) → CENTER (0) → LEFT (LEFT_POSITION)
-  // • Central Transfer Dock visual with optical barcode scanning
+  // • Package moves directly RIGHT → LEFT, with the handover on the left side
   //
   // ─── SCENE 2: 0:17 COURIER PARTNER & ASTRONAUT COURIER (progress 0.48 → 1.00) ───
   // • Courier Partner appears on RIGHT (existing character position kept, "Leo" removed)
@@ -46,7 +45,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // PHASE 1 VARIABLES (0:13 COURIER TRANSFER)
   // ─────────────────────────────────────────────────────────────
   const p1 = Math.min(Math.max(progress / 0.48, 0), 1);
-  const isP1AtCenter = p1 >= 0.20 && p1 <= 0.72;
+  const isP1AtCenter = p1 >= 0.68 && p1 <= 0.88;
   const isP1HandoverComplete = p1 >= 0.36;
   const showTransferMessage = isPhase1 && p1 >= 0.28 && p1 <= 0.88;
   const isP1Scanning = isPhase1 && p1 >= 0.18 && p1 < 0.42;
@@ -55,33 +54,31 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   if (p1 < 0.20) {
     const t = p1 / 0.20;
     p1PackageX = coords.RIGHT_POSITION * (1 - smootherstep(t));
-  } else if (p1 <= 0.72) {
-    p1PackageX = coords.CENTER_POSITION;
-  } else if (p1 < 0.88) {
-    const t = (p1 - 0.72) / 0.16;
-    p1PackageX = coords.LEFT_POSITION * smootherstep(t);
+  } else if (p1 <= 0.88) {
+    const t = (p1 - 0.20) / 0.68;
+    p1PackageX = coords.RIGHT_POSITION + (coords.LEFT_POSITION - coords.RIGHT_POSITION) * smootherstep(t);
   } else {
     p1PackageX = coords.LEFT_POSITION;
   }
 
   let p1StationOpacity = 1;
-  let p1StationX = 0;
+  let p1StationX = coords.LEFT_POSITION;
   if (p1 < 0.14) {
     const t = p1 / 0.14;
     const s = smootherstep(t);
     p1StationOpacity = s;
-    p1StationX = (1 - s) * 20;
+    p1StationX = coords.LEFT_POSITION + (1 - s) * 20;
   } else if (p1 <= 0.72) {
     p1StationOpacity = 1;
-    p1StationX = 0;
+    p1StationX = coords.LEFT_POSITION;
   } else if (p1 < 0.86) {
     const t = (p1 - 0.72) / 0.14;
     const s = smootherstep(t);
     p1StationOpacity = Math.max(0, 1 - s * 1.3);
-    p1StationX = -s * 15;
+    p1StationX = coords.LEFT_POSITION - s * 15;
   } else {
     p1StationOpacity = 0;
-    p1StationX = -15;
+    p1StationX = coords.LEFT_POSITION - 15;
   }
 
   // ─────────────────────────────────────────────────────────────

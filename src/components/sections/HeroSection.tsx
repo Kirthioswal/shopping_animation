@@ -173,32 +173,32 @@ const HeroSection = () => {
   // Preserve the desktop composition while keeping the phone fully in view on
   // narrower desktop widths.
   const initialPhoneOffset = isDesktop
-    ? -Math.min(16, (viewportW - 320) / viewportW * 50)
-    : isTablet ? -26 : 0;
+    ? -Math.min(25, (viewportW - 320) / viewportW * 50)
+    : isTablet ? -30 : -22;
 
   if (heroProgress < 0.08) {
     const t = heroProgress / 0.08;
-    phoneX = initialPhoneOffset * (1 - t); // moves from -16vw to 0vw
+    phoneX = initialPhoneOffset;
     phoneOpacity = 1;
   } else if (heroProgress <= 0.36) {
-    phoneX = 0; // VISUALLY LOCKED AT CENTER
+    phoneX = initialPhoneOffset; // stays in the left lane beside the headline
     phoneOpacity = 1;
   } else if (heroProgress < 0.44) {
     const t = (heroProgress - 0.36) / 0.08;
-    phoneX = -t * 24; // exits left: 0vw -> -24vw
+    phoneX = initialPhoneOffset - t * 14; // exits farther left after the notification departs
     phoneOpacity = Math.max(0, 1 - t * 1.5);
   } else {
     phoneOpacity = 0;
-    phoneX = -24;
+    phoneX = initialPhoneOffset - 14;
   }
 
   // At phone widths, introduce the handset after the hero copy clears. At
   // tablet widths it shares the opening frame with the copy in a left/right
   // composition instead of covering the headline.
-  const mobileEnter = Math.min(Math.max(heroProgress / 0.14, 0), 1);
+  const mobileEnter = isPhoneViewport ? 1 : Math.min(Math.max(heroProgress / 0.14, 0), 1);
   const mobileEnterEase = mobileEnter * mobileEnter * (3 - 2 * mobileEnter);
-  const responsivePhoneY = isPhoneViewport ? (1 - mobileEnterEase) * viewportH * 0.30 : 0;
-  const responsivePhoneOpacity = phoneOpacity * (isPhoneViewport ? mobileEnterEase : 1);
+  const responsivePhoneY = 0;
+  const responsivePhoneOpacity = phoneOpacity;
 
   // =========================================================================
   // ORIGINAL MESSAGE NOTIFICATION CHOREOGRAPHY (APPEAR -> CENTER HOLD -> FLIGHT)
@@ -260,25 +260,26 @@ const HeroSection = () => {
   // 0.84 -> 0.92: Terminal exits gently to LEFT (0vw -> -30vw) with soft fade
   // 0.92 -> 1.00: BREATHING SPACE before Stage 1 Package Transformation
   // =========================================================================
-  let terminalX = 30;
+  const terminalSideOffset = isDesktop ? 19 : isTablet ? 15 : 0;
+  let terminalX = terminalSideOffset;
   let terminalOpacity = 0;
   if (heroProgress < 0.48) {
-    terminalX = 30;
+    terminalX = terminalSideOffset;
     terminalOpacity = 0;
   } else if (heroProgress < 0.58) {
     const t = (heroProgress - 0.48) / 0.10;
-    terminalX = 30 * (1 - t); // moves from +30vw to 0vw
+    terminalX = terminalSideOffset;
     terminalOpacity = Math.min(1, t * 1.2);
   } else if (heroProgress <= 0.84) {
-    terminalX = 0; // VISUALLY LOCKED AT CENTER
+    terminalX = terminalSideOffset; // stays in the right lane
     terminalOpacity = 1;
   } else if (heroProgress < 0.92) {
     const t = (heroProgress - 0.84) / 0.08;
-    terminalX = -t * 30; // exits left: 0vw -> -30vw
+    terminalX = terminalSideOffset - t * (terminalSideOffset + 24); // exits left for the next scene
     terminalOpacity = Math.max(0, 1 - t * 1.5);
   } else {
     terminalOpacity = 0;
-    terminalX = -30;
+    terminalX = -24;
   }
 
   const isOrderReceivedInTerminal = heroProgress >= 0.58;
@@ -312,15 +313,15 @@ const HeroSection = () => {
           willChange: 'transform, opacity',
         }}
       >
-        <div className="w-full md:w-[55%] lg:w-[55%] text-center md:text-left flex flex-col items-center md:items-start md:pl-6 pointer-events-auto">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight tracking-tight min-h-[140px] sm:min-h-[180px] md:min-h-[220px]">
+        <div className="w-[54%] sm:w-full md:w-[55%] lg:w-[55%] text-left flex flex-col items-start md:pl-6 pointer-events-auto">
+          <h1 className="text-xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-3 sm:mb-6 leading-tight tracking-tight min-h-[100px] sm:min-h-[180px] md:min-h-[220px]">
             {renderText()}
             {showCursor && (
               <span className="inline-block w-[3px] h-[0.8em] bg-[#F97316] ml-1 animate-pulse align-baseline" />
             )}
           </h1>
 
-          <p className="text-base sm:text-lg text-gray-400 mb-8 max-w-xl leading-relaxed">
+          <p className="text-[11px] sm:text-lg text-gray-400 mb-4 sm:mb-8 max-w-xl leading-relaxed">
             From dark stores to doorsteps, Jiffy makes quick commerce logistics
             effortless — delivering products to your customers in record time.
           </p>
@@ -348,7 +349,7 @@ const HeroSection = () => {
         <div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto"
           style={{
-            transform: `translate3d(${phoneX}vw, ${responsivePhoneY}px, 0)`,
+            transform: `translate3d(${phoneX}vw, ${responsivePhoneY}px, 0) scale(${isPhoneViewport ? 0.62 : 1})`,
             opacity: responsivePhoneOpacity,
             willChange: 'transform, opacity',
           }}
