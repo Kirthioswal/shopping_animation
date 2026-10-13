@@ -1,0 +1,465 @@
+/* =========================================================================
+   STAGE GEOMETRY
+   One pinned 100vh stage. Everything is positioned from these variables so
+   the scroll timeline never has to hard-code pixel positions: GSAP only adds
+   transforms on top of these resting positions, and the package reads live
+   anchor positions every frame (see motion.ts).
+   ========================================================================= */
+.stage {
+  --ground: 11vh;                              /* floor line, from the bottom */
+  --char-h: min(44vh, 390px);                  /* astronaut height */
+  --char-w: calc(var(--char-h) * 0.6667);      /* astronaut viewBox is 240x360 */
+  --lane-l: 15vw;                              /* center of the left lane */
+  --lane-r: 85vw;                              /* center of the right lane */
+  --phone-h: min(64vh, 590px);
+  --box-w: min(68vw, 940px, 104vh);            /* package at full size */
+  --box-ar: 1.6;
+  --col-w: min(40vw, 620px);                   /* center copy column */
+
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 70% at 50% 118%, rgba(249, 115, 22, 0.16), transparent 60%),
+    radial-gradient(60% 50% at 85% 0%, rgba(124, 92, 252, 0.12), transparent 70%),
+    linear-gradient(180deg, #06050b 0%, #0b0914 55%, #120e20 100%);
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  .stage {
+    --char-h: min(36vh, 310px);
+    --lane-l: 15vw;
+    --lane-r: 85vw;
+    --col-w: min(44vw, 520px);
+    --box-w: min(80vw, 104vh);
+    --phone-h: min(56vh, 520px);
+  }
+}
+
+@media (max-width: 767px) {
+  .stage {
+    --ground: 7vh;
+    --char-h: min(28vh, 230px);
+    --lane-l: 24vw;
+    --lane-r: 76vw;
+    --phone-h: min(40vh, 340px);
+    --box-w: 90vw;
+    --box-ar: 0.74;
+    --col-w: 90vw;
+  }
+}
+
+.stage-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* A slot is the resting position (never animated). Its child .actor is what
+   GSAP moves, so resting positions stay pure CSS. */
+.slot {
+  position: absolute;
+  bottom: var(--ground);
+  transform: translateX(-50%);
+}
+.slot > .actor {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+.slot > .actor > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.slot-char {
+  width: var(--char-w);
+  height: var(--char-h);
+}
+.slot-l { left: var(--lane-l); }
+.slot-r { left: var(--lane-r); }
+
+.slot-phone {
+  left: var(--lane-l);
+  top: 50%;
+  bottom: auto;
+  height: var(--phone-h);
+  width: calc(var(--phone-h) * 0.49);
+  transform: translate(-50%, -44%);
+}
+
+.slot-table {
+  left: var(--lane-r);
+  width: var(--char-h);
+  height: calc(var(--char-h) * 0.25);
+}
+
+.slot-warehouse {
+  height: calc(var(--char-h) * 1.12);
+  width: calc(var(--char-h) * 1.288);
+  /* door (66% across) lines up with the courier's lane */
+  left: calc(var(--lane-l) - var(--char-h) * 0.85);
+  transform: none;
+}
+
+.slot-house {
+  /* taller than the cast so the roof and windows read above them */
+  height: calc(var(--char-h) * 1.36);
+  width: calc(var(--char-h) * 1.484);
+  /* door (62% across) sits just left of the courier */
+  left: calc(var(--lane-l) - var(--char-h) * 1.22);
+  transform: none;
+}
+.slot-homemaker {
+  left: calc(var(--lane-l) - var(--char-h) * 0.3);
+}
+
+.slot-plane {
+  height: var(--char-h);
+  width: calc(var(--char-h) * 2.1);
+  left: calc(var(--lane-r) - var(--char-h) * 0.42);
+  transform: none;
+}
+
+@media (max-width: 767px) {
+  .slot-phone {
+    top: auto;
+    bottom: calc(var(--ground) + 1vh);
+    transform: translateX(-50%);
+  }
+}
+
+/* =========================================================================
+   CENTER COPY COLUMN
+   ========================================================================= */
+.copy-col {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--col-w);
+  height: 0;
+  transform: translateX(-50%);
+  z-index: 15;
+}
+.copy-block {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  transform: translateY(-50%);
+  text-align: center;
+  pointer-events: auto;
+}
+.copy-block-inner {
+  will-change: transform, opacity;
+}
+@media (max-width: 767px) {
+  .copy-col { top: 11vh; }
+  .copy-block { transform: none; }
+}
+
+/* =========================================================================
+   PACKAGE  (HTML so text stays crisp at 70% of the screen; scaled DOWN when
+   small, never up)
+   ========================================================================= */
+.pkg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--box-w);
+  aspect-ratio: var(--box-ar);
+  z-index: 30;
+  container-type: inline-size;
+  will-change: transform;
+  visibility: hidden;
+}
+.pkg-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.4cqw;
+  background:
+    radial-gradient(120% 90% at 20% 10%, rgba(255, 236, 205, 0.35), transparent 55%),
+    linear-gradient(180deg, #e3ab6f 0%, #d29a5e 55%, #b97f45 100%);
+  box-shadow:
+    inset 0 0 0 0.25cqw rgba(120, 70, 30, 0.35),
+    inset 0 -2.4cqw 3cqw -1cqw rgba(110, 60, 20, 0.35),
+    0 3cqw 6cqw -2cqw rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+/* corrugated fibre texture */
+.pkg-front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(90, 50, 15, 0.05) 0 0.35cqw, transparent 0.35cqw 1.1cqw);
+  mix-blend-mode: multiply;
+}
+.pkg-side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: 7%;
+  transform: skewY(-28deg);
+  transform-origin: 0 0;
+  background: linear-gradient(90deg, #a2672f, #8d5826);
+  border-radius: 0 0.8cqw 0.8cqw 0;
+}
+.pkg-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 11%;
+  background: linear-gradient(180deg, #c78b4f, #e7b57d);
+  transform-origin: bottom left;
+  transform: skewX(-32deg) translateX(3.4%);
+  border-radius: 0.8cqw 0.8cqw 0 0;
+  box-shadow: inset 0 -0.2cqw 0 rgba(120, 70, 30, 0.35);
+}
+.pkg-tape-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  height: 26%;
+  background: linear-gradient(180deg, rgba(255, 235, 200, 0.85), rgba(240, 205, 150, 0.85));
+  transform-origin: left center;
+}
+/* Open-box flaps. The back flap lives inside .pkg-top (inherits its skew)
+   and folds down with scaleY; the front flap hangs over the front face and
+   folds up. */
+.pkg-flap-back {
+  position: absolute;
+  left: 2%;
+  right: 2%;
+  bottom: 100%;
+  height: 170%;
+  transform-origin: bottom center;
+  background: linear-gradient(180deg, #b77b40, #dca46a);
+  border-radius: 0.8cqw 0.8cqw 0 0;
+  box-shadow: inset 0 0.3cqw 0 rgba(255, 230, 190, 0.35);
+}
+.pkg-flap-front {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 24%;
+  transform-origin: top center;
+  background: linear-gradient(0deg, #b77b40, #d9a165);
+  border-radius: 0 0 0.8cqw 0.8cqw;
+  box-shadow: 0 0.8cqw 1.5cqw -0.5cqw rgba(60, 30, 5, 0.45);
+  z-index: 2;
+}
+.pkg-tape-front {
+  position: absolute;
+  left: 43%;
+  width: 14%;
+  top: 0;
+  height: 20%;
+  background: linear-gradient(90deg, rgba(255, 235, 200, 0.9), rgba(240, 205, 150, 0.9));
+  transform-origin: top center;
+  border-radius: 0 0 0.4cqw 0.4cqw;
+}
+.pkg-decor {
+  position: absolute;
+  inset: 0;
+}
+.pkg-screen {
+  position: absolute;
+  inset: 6.5% 5% 11% 5%;
+}
+.pkg-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3.6%;
+  display: flex;
+  justify-content: center;
+  gap: 1cqw;
+}
+.pkg-dot {
+  width: 1.1cqw;
+  height: 1.1cqw;
+  min-width: 6px;
+  min-height: 6px;
+  border-radius: 999px;
+  background: rgba(90, 50, 15, 0.35);
+}
+.pkg-dot-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: #7c2d12;
+  transform: scale(0);
+}
+
+/* Feature card printed on the box face */
+.fcard {
+  position: absolute;
+  inset: 0;
+  border-radius: 2.2cqw;
+  padding: 4cqw 4.4cqw;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 2.5cqw;
+  align-items: center;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 1.2cqw 3cqw -1cqw rgba(40, 20, 5, 0.55), inset 0 0.15cqw 0 rgba(255, 255, 255, 0.25);
+  visibility: hidden;
+}
+.fcard-eyebrow {
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 1.35cqw;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.fcard-title {
+  font-family: "Outfit", sans-serif;
+  font-weight: 700;
+  font-size: 4.1cqw;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-top: 1.2cqw;
+}
+.fcard-sub {
+  font-family: "Outfit", sans-serif;
+  font-weight: 600;
+  font-size: 1.9cqw;
+  margin-top: 1.4cqw;
+}
+.fcard-body {
+  font-size: 1.55cqw;
+  line-height: 1.5;
+  margin-top: 1cqw;
+  opacity: 0.88;
+  max-width: 40ch;
+}
+.fcard-art {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fcard-art svg {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+.fcard::after {
+  /* sticker sheen */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.18) 0%, transparent 35%);
+  pointer-events: none;
+}
+
+@container (max-width: 560px) {
+  .fcard {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 6cqw;
+    gap: 3cqw;
+    align-items: start;
+  }
+  .fcard-eyebrow { font-size: 3cqw; }
+  .fcard-title { font-size: 7.6cqw; }
+  .fcard-sub { font-size: 4cqw; }
+  .fcard-body { font-size: 3.6cqw; }
+  .fcard-art { order: -1; height: 34cqw; }
+  .pkg-dot { width: 2.2cqw; height: 2.2cqw; }
+}
+
+/* =========================================================================
+   MISC
+   ========================================================================= */
+.dim {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  background: radial-gradient(70% 70% at 50% 50%, rgba(10, 8, 18, 0.55), rgba(5, 4, 10, 0.85));
+  opacity: 0;
+  pointer-events: none;
+}
+.spot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 90vw;
+  height: 90vh;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side, rgba(249, 115, 22, 0.22), transparent 70%);
+  z-index: 26;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.popup {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 32;
+  width: clamp(210px, 17vw, 268px);
+  visibility: hidden;
+  will-change: transform;
+}
+
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 33;
+  pointer-events: none;
+}
+.confetti {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  border-radius: 2px;
+  visibility: hidden;
+}
+.heart {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 26px;
+  height: 26px;
+  visibility: hidden;
+}
+
+.twinkle {
+  animation: twinkle var(--tw, 3s) ease-in-out infinite;
+  animation-delay: var(--td, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--o, 0.6); }
+  50% { opacity: calc(var(--o, 0.6) * 0.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .twinkle { animation: none; }
+}
+
+/* Journey tracker states (set by timeline.ts) */
+.hud-step .hud-dot { background: rgba(255, 255, 255, 0.18); transition: background 0.25s, box-shadow 0.25s; }
+.hud-step .hud-label { color: #6f6987; transition: color 0.25s; }
+.hud-step[data-state="done"] .hud-dot { background: #34d399; }
+.hud-step[data-state="done"] .hud-label { color: #a9a4bd; }
+.hud-step[data-state="active"] { background: rgba(249, 115, 22, 0.14); }
+.hud-step[data-state="active"] .hud-dot { background: #f97316; box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.25); }
+.hud-step[data-state="active"] .hud-label { color: #f5f3ee; }
+@media (max-width: 1100px) {
+  .hud-step:not([data-state="active"]) .hud-label { display: none; }
+}

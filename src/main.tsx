@@ -1,15 +1,9 @@
-import { createRoot, hydrateRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import { createRoot, hydrateRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
 
 const rootElement = document.getElementById("root")!;
 
-// Check if the app was pre-rendered by react-snap
-if (rootElement.hasChildNodes()) {
-  // Hydrate the pre-rendered content
-  hydrateRoot(rootElement, <App />);
-} else {
-  // First-time render (development mode)
-  createRoot(rootElement).render(<App />);
-}
- 
+// Hydrate when pre-rendered by react-snap (build:snap), otherwise render.
+if (rootElement.hasChildNodes()) hydrateRoot(rootElement, <App />);
+else createRoot(rootElement).render(<App />);

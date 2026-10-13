@@ -1,175 +1,90 @@
 import { Link } from "react-router-dom";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
+import { Mail, MapPin, Phone } from "lucide-react";
+import logo from "@/assets/logo.png";
 
-const Footer = () => {
-  return (
-    <BackgroundBeamsWithCollision className="min-h-[300px] bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Contact Us Section */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Contact Us</h3>
-            <div className="space-y-3">
-              <div>
-                <p className="text-muted-foreground text-sm mb-1">Reach us at</p>
-                <a
-                  href="mailto:Hello@jiffy.world"
-                  className="text-foreground hover:text-primary transition-colors font-medium"
-                >
-                  Hello@jiffy.world
-                </a>
-                <a
-                  className="text-foreground hover:text-primary transition-colors font-medium block"
-                >
-                  011-411-85353
-                </a>
-              </div>
-              <div>
-                <p className="text-muted-foreground text-sm mb-2 font-medium">Corporate Office Address:</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  3rd Floor, Spring House Workspaces,<br />
-                  JMD Regent Arcade mall, A Block,<br />
-                  DLF Phase 1, Sector 28,<br />
-                  Gurugram, Haryana 122002
-                </p>
-              </div>
-            </div>
-          </div>
+const SOCIAL = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/jiffyworld/about/" },
+  { label: "Facebook", href: "https://www.facebook.com/jiffy.world/" },
+  { label: "Instagram", href: "https://www.instagram.com/jiffy.world/" },
+];
 
-          {/* Legal Section */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/privacy"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/terms"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  Terms and Conditions
-                </Link>
-              </li>
-              {/* <li>
-                <Link to="/refund" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Refund Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/money-back" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Money-Back Guarantee
-                </Link>
-              </li>
-              <li>
-                <Link to="/policies" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Other Policies
-                </Link>
-              </li> */}
-            </ul>
-          </div>
-
-          {/* Product Section */}
-          {/* <div>
-            <h3 className="font-semibold text-foreground mb-4">Product</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/features" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link to="/pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link to="/integrations" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Integrations
-                </Link>
-              </li>
-              <li>
-                <Link to="/api" className="text-muted-foreground hover:text-foreground transition-colors">
-                  API
-                </Link>
-              </li>
-            </ul>
-          </div> */}
-
-          {/* Company Section */}
-          <div>
-            <h3 className="font-semibold text-foreground mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/about"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => window.scrollTo(0, 0)}
-                >
-                  About Us
-                </Link>
-              </li>
-              {/* <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link to="/careers" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link to="/press" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Press
-                </Link>
-              </li> */}
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="border-t border-border mt-8 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-muted-foreground text-sm">
-            © 2024 Jiffy. All rights reserved.
-          </p>
-          <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a
-              href="https://www.linkedin.com/company/jiffyworld/about/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              LinkedIn
+const Footer = () => (
+  <footer className="relative overflow-hidden border-t border-white/[0.06] bg-night-900">
+    <div
+      className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-jiffy-500/60 to-transparent"
+      aria-hidden="true"
+    />
+    <div className="container grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <img src={logo} alt="Jiffy" className="h-8 w-auto" />
+        <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-muted">
+          Powering quick commerce from dark stores to doorsteps.
+        </p>
+        <h3 className="mt-8 font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink">Contact Us</h3>
+        <ul className="mt-4 space-y-3 text-sm text-ink-muted">
+          <li className="flex items-center gap-3">
+            <Mail className="h-4 w-4 text-jiffy-400" />
+            <a href="mailto:Hello@jiffy.world" className="transition-colors hover:text-ink">
+              Hello@jiffy.world
             </a>
-            <a
-              href="https://www.facebook.com/jiffy.world/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Facebook
+          </li>
+          <li className="flex items-center gap-3">
+            <Phone className="h-4 w-4 text-jiffy-400" />
+            <a href="tel:01141185353" className="transition-colors hover:text-ink">
+              011-411-85353
             </a>
-            <a
-              href="https://www.instagram.com/jiffy.world/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Instagram
+          </li>
+          <li className="flex gap-3">
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-jiffy-400" />
+            <span>
+              Corporate Office: 3rd Floor, Spring House Workspaces, JMD Regent Arcade mall, A Block, DLF Phase 1, Sector
+              28, Gurugram, Haryana 122002
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink">Legal</h3>
+        <ul className="mt-4 space-y-3 text-sm text-ink-muted">
+          <li>
+            <Link to="/privacy" className="transition-colors hover:text-ink">
+              Privacy Policy
+            </Link>
+          </li>
+          <li>
+            <Link to="/terms" className="transition-colors hover:text-ink">
+              Terms and Conditions
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink">Company</h3>
+        <ul className="mt-4 space-y-3 text-sm text-ink-muted">
+          <li>
+            <Link to="/about" className="transition-colors hover:text-ink">
+              About Us
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div className="border-t border-white/[0.06]">
+      <div className="container flex flex-col items-center justify-between gap-4 py-6 text-sm text-ink-dim sm:flex-row">
+        <p>© 2024 Jiffy. All rights reserved.</p>
+        <div className="flex gap-6">
+          {SOCIAL.map((s) => (
+            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-ink">
+              {s.label}
             </a>
-          </div>
+          ))}
         </div>
       </div>
-    </BackgroundBeamsWithCollision>
-  );
-};
+    </div>
+  </footer>
+);
 
 export default Footer;

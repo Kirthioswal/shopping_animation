@@ -1,94 +1,74 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-interface FAQItem {
-  question: string;
-  answer: string;
-}
-
-const faqData: FAQItem[] = [
+const FAQ = [
   {
-    question: "What is Jiffy?",
-    answer: "Jiffy is your all-in-one shipping and fulfillment platform that helps D2C brands, retailers, and e-commerce sellers manage deliveries with speed, reliability, and ease."
+    q: "What is Jiffy?",
+    a: "Jiffy is your all-in-one shipping and fulfillment platform that helps D2C brands, retailers, and e-commerce sellers manage deliveries with speed, reliability, and ease.",
   },
   {
-    question: "Which integrations do you support?",
-    answer: "Jiffy integrates seamlessly with Shopify, Amazon, Myntra, WooCommerce, Swiggy, Zomato, and more—so you can manage everything from a single dashboard."
+    q: "Which integrations do you support?",
+    a: "Jiffy integrates seamlessly with Shopify, Amazon, Myntra, WooCommerce, Swiggy, Zomato, and more—so you can manage everything from a single dashboard.",
   },
   {
-    question: "How is Jiffy different from other shipping platforms?",
-    answer: "Unlike traditional platforms, Jiffy is built to scale with you. Whether you're shipping 10 or 10,000 orders, we ensure faster deliveries, better rates, and stress-free logistics."
+    q: "How is Jiffy different from other shipping platforms?",
+    a: "Unlike traditional platforms, Jiffy is built to scale with you. Whether you're shipping 10 or 10,000 orders, we ensure faster deliveries, better rates, and stress-free logistics.",
   },
   {
-    question: "What pricing plans do you offer?",
-    answer: "We offer flexible plans tailored to your growth stage—so whether you're just starting out or scaling big, Jiffy adapts to your needs."
+    q: "What pricing plans do you offer?",
+    a: "We offer flexible plans tailored to your growth stage—so whether you're just starting out or scaling big, Jiffy adapts to your needs.",
   },
   {
-    question: "How do I get started?",
-    answer: "Getting started is easy—sign up, connect your store, choose your preferred courier partners, and start shipping instantly with Jiffy."
-  }
+    q: "How do I get started?",
+    a: "Getting started is easy—sign up, connect your store, choose your preferred courier partners, and start shipping instantly with Jiffy.",
+  },
 ];
 
 const FAQSection = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+  const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq-section" className="py-20 bg-black">
-      <div className="container mx-auto px-6 max-w-6xl">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left Side - Heading */}
-          <div className="text-white">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Questions?{" "}
-              <br />
-              Let's clear things up.
-            </h2>
-            <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-              We get it—shipping, logistics, integrations, fulfillment… it can sound overwhelming. But with Jiffy, things are simple, fast, and stress-free.
+    <section id="faq-section" className="bg-night-950 py-24 md:py-32">
+      <div className="container grid items-start gap-14 lg:grid-cols-2">
+        <div>
+          <span className="eyebrow">
+            <span className="h-1.5 w-1.5 rounded-full bg-jiffy-400" />
+            FAQs
+          </span>
+          <h2 className="mt-5 text-[clamp(32px,4vw,56px)] font-bold leading-[1.05]">
+            Questions?
+            <br />
+            <span className="bg-gradient-to-r from-jiffy-400 to-jiffy-600 bg-clip-text text-transparent">Let's clear things up.</span>
+          </h2>
+          <p className="mt-5 text-lg leading-relaxed text-ink-muted">
+            We get it—shipping, logistics, integrations, fulfillment… it can sound overwhelming. But with Jiffy, things are
+            simple, fast, and stress-free.
+          </p>
+          <p className="mt-4 text-lg leading-relaxed text-ink-muted">
+            We’ve put together answers to the most common questions to help you get started. And if you ever need more,
+            our support team is just a click away—always ready to help.
+          </p>
+        </div>
 
-            </p>
-            <p className="text-lg text-gray-300 leading-relaxed">
-              We’ve put together answers to the most common questions to help you get started. And if you ever need more, our support team is just a click away—always ready to help.
-
-            </p>
-          </div>
-
-          {/* Right Side - FAQ Items */}
-          <div className="space-y-4">
-            {faqData.map((faq, index) => (
-              <div
-                key={index}
-                className="border-b border-gray-700 pb-4"
-              >
+        <div className="divide-y divide-white/[0.08] rounded-3xl border border-white/[0.07] bg-white/[0.02] px-6">
+          {FAQ.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div key={f.q}>
                 <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full flex items-center justify-between text-left py-4 text-white hover:text-gray-300 transition-colors"
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left font-display text-lg font-semibold text-ink transition-colors hover:text-jiffy-300"
                 >
-                  <span className="text-lg font-medium pr-4">{faq.question}</span>
-                  <ChevronDown
-                    className={`w-5 h-5 transition-transform duration-300 flex-shrink-0 ${
-                      openIndex === index ? "rotate-180" : ""
-                    }`}
-                  />
+                  {f.q}
+                  <ChevronDown className={`h-5 w-5 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-jiffy-400" : ""}`} />
                 </button>
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="pb-4">
-                    <p className="text-gray-300 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
+                <div className={`grid transition-all duration-300 ${isOpen ? "grid-rows-[1fr] pb-5 opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                  <p className="overflow-hidden leading-relaxed text-ink-muted">{f.a}</p>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </section>
