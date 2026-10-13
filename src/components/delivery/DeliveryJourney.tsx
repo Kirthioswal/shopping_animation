@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Package, Bike, Warehouse, Plane, CheckCircle2, ChevronRight, Sparkles } from 'lucide-react';
+import { Package, Bike, Warehouse, Plane, CheckCircle2, ChevronRight, Sparkles, MapPin } from 'lucide-react';
 import { journeySteps } from '@/data/journeySteps';
 import { useScrollStore } from '@/stores/scrollStore';
 import { DeliveryPackage } from './DeliveryPackage';
@@ -47,7 +47,7 @@ class SceneErrorBoundary extends React.Component<
 
 // Scene lengths follow the storyboard's relative scroll budgets.
 const SCENES = [
-  { weight: 4, kind: 'feature', cards: ['From dark stores to doorsteps', 'Quick commerce logistics made effortless', 'Delivering products to your customers in record time', 'Your Logistics Crew, Always On Duty.', "From scanning to shipping, Jiffy's smart team works round the clock."], direction: 'right' as const },
+  { weight: 4, kind: 'packageCards' },
   { weight: 1.8, kind: 'catch' },
   { weight: 2.6, kind: 'warehouse' },
   { weight: 4.5, kind: 'feature', cards: ['Streamline business processes', 'Bring your favorite tools and AI helpers together', 'AI for business', 'Make working with integrations easier than ever'], direction: 'left' as const },
@@ -118,6 +118,72 @@ const FeatureShowcase: React.FC<{ progress: number; cards: string[]; direction: 
   );
 };
 
+const PACKAGE_STORY_CARDS = [
+  { label: 'ORDER CONFIRMED', title: 'Your order is in.', description: 'Jiffy has received your order and tracking is live.', Icon: CheckCircle2 },
+  { label: 'PACKED & SEALED', title: 'Packed with care.', description: 'Your parcel is protected and ready for its journey.', Icon: Package },
+  { label: 'COURIER ASSIGNED', title: 'A rider is on the way.', description: 'A delivery partner is ready to take your package.', Icon: Bike },
+  { label: 'OUT FOR DELIVERY', title: 'Almost at your door.', description: 'Your shipment is on the final route to its destination.', Icon: MapPin },
+];
+
+const PackageCardShowcase: React.FC<{ progress: number }> = ({ progress }) => {
+  const coords = useViewportCoordinates();
+  const position = Math.min(PACKAGE_STORY_CARDS.length - 1, progress * (PACKAGE_STORY_CARDS.length - 1));
+  const fromIndex = Math.floor(position);
+  const toIndex = Math.min(PACKAGE_STORY_CARDS.length - 1, fromIndex + 1);
+  const blend = smootherstep(position - fromIndex);
+  const packageScale = coords.isMobile ? 0.76 : 1.1;
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_68%,rgba(249,115,22,0.12),transparent_48%)]" />
+
+      <div className="absolute left-1/2 top-[31%] w-[min(88vw,620px)] -translate-x-1/2">
+        {PACKAGE_STORY_CARDS.map((card, index) => {
+          const opacity = index === fromIndex ? 1 - blend : index === toIndex ? blend : 0;
+          if (opacity < 0.01) return null;
+          const Icon = card.Icon;
+
+          return (
+            <div
+              key={card.label}
+              className="absolute inset-x-0 top-0 rounded-2xl border border-white/15 bg-neutral-950/90 p-4 shadow-[0_18px_60px_rgba(0,0,0,.55)] backdrop-blur-xl sm:rounded-3xl sm:p-6"
+              style={{ opacity, transform: `translate3d(0,${(1 - opacity) * 12}px,0)` }}
+            >
+              <div className="flex items-start gap-4 sm:gap-5">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-orange-400/30 bg-orange-500/15 text-orange-300 sm:h-14 sm:w-14">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                </div>
+                <div className="min-w-0 flex-1 text-left">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-[9px] font-mono font-bold tracking-[0.2em] text-orange-300 sm:text-[11px]">{card.label}</p>
+                    <span className="shrink-0 text-[9px] font-mono text-white/45 sm:text-[10px]">{String(index + 1).padStart(2, '0')} / 04</span>
+                  </div>
+                  <h3 className="mt-1 text-lg font-extrabold leading-tight text-white sm:text-2xl">{card.title}</h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-neutral-300 sm:mt-2 sm:text-sm">{card.description}</p>
+                </div>
+              </div>
+              <div className="mt-4 flex gap-1.5 sm:mt-5" aria-hidden="true">
+                {PACKAGE_STORY_CARDS.map((item, dotIndex) => (
+                  <span key={item.label} className={`h-1 rounded-full transition-[width,background-color] duration-200 ${dotIndex === index ? 'w-8 bg-orange-400' : 'w-2 bg-white/25'}`} />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        className="absolute left-1/2 top-[70%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+        style={{ transform: `translate3d(-50%, calc(-50% + ${Math.sin(progress * Math.PI * 3) * 5}px), 0)` }}
+      >
+        <DeliveryPackage scale={packageScale} className="drop-shadow-[0_18px_40px_rgba(0,0,0,.7)]" />
+      </div>
+
+      <div className="absolute bottom-[12%] inset-x-0 text-center text-[9px] font-mono tracking-[0.25em] text-white/40 uppercase sm:text-[10px]">Scroll to follow your order</div>
+    </div>
+  );
+};
+
 export const DeliveryJourney: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
@@ -164,6 +230,7 @@ export const DeliveryJourney: React.FC = () => {
   const Icon = ICONS[index];
   const stageView = (() => {
     switch (scene.kind) {
+      case 'packageCards': return <PackageCardShowcase progress={local} />;
       case 'feature': return <FeatureShowcase progress={local} cards={scene.cards!} direction={scene.direction!} />;
       case 'catch': return <Step2CourierHandover progress={local} />;
       case 'warehouse': return <Step3WarehouseTransit progress={local} />;
