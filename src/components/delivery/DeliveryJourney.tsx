@@ -10,6 +10,7 @@ import { Step3WarehouseTransit } from './stages/Step3WarehouseTransit';
 import { Step4AirLoading } from './stages/Step4AirLoading';
 import { Step6LocalCourier } from './stages/Step6LocalCourier';
 import { Step7CustomerDelivered } from './stages/Step7CustomerDelivered';
+import { StepAstronautMotion } from './stages/StepAstronautMotion';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
 import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
@@ -48,6 +49,7 @@ class SceneErrorBoundary extends React.Component<
 // Scene lengths follow the storyboard's relative scroll budgets.
 const SCENES = [
   { weight: 4, kind: 'packageCards' },
+  { weight: 2.4, kind: 'astronaut' },
   { weight: 1.8, kind: 'catch' },
   { weight: 2.6, kind: 'warehouse' },
   { weight: 4.5, kind: 'feature', cards: ['Streamline business processes', 'Bring your favorite tools and AI helpers together', 'AI for business', 'Make working with integrations easier than ever'], direction: 'left' as const },
@@ -57,7 +59,7 @@ const SCENES = [
   { weight: 3, kind: 'delivered' },
 ];
 const TOTAL_WEIGHT = SCENES.reduce((sum, scene) => sum + scene.weight, 0);
-const ICONS = [Package, Bike, Warehouse, Package, Plane, Sparkles, Bike, CheckCircle2];
+const ICONS = [Package, Sparkles, Bike, Warehouse, Package, Plane, Sparkles, Bike, CheckCircle2];
 
 function getScene(progress: number) {
   let cursor = 0;
@@ -231,6 +233,7 @@ export const DeliveryJourney: React.FC = () => {
   const stageView = (() => {
     switch (scene.kind) {
       case 'packageCards': return <PackageCardShowcase progress={local} />;
+      case 'astronaut': return <StepAstronautMotion progress={local} />;
       case 'feature': return <FeatureShowcase progress={local} cards={scene.cards!} direction={scene.direction!} />;
       case 'catch': return <Step2CourierHandover progress={local} />;
       case 'warehouse': return <Step3WarehouseTransit progress={local} />;
