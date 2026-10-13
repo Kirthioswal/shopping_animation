@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ShoppingBag,
@@ -23,29 +23,30 @@ export const OrderPhoneMockup = ({
   scrollProgress,
 }: OrderPhoneMockupProps) => {
   const [orderStep, setOrderStep] = useState<0 | 1>(0);
+  const onOrderPlacedRef = useRef(onOrderPlaced);
 
-  // Scroll-driven state when scrollProgress is provided
   useEffect(() => {
-    if (scrollProgress !== undefined) {
-      if (scrollProgress >= 0.18 && orderStep === 0) {
-        setOrderStep(1);
-        onOrderPlaced?.();
-      } else if (scrollProgress < 0.14 && orderStep === 1) {
-        setOrderStep(0);
-      }
+    onOrderPlacedRef.current = onOrderPlaced;
+  }, [onOrderPlaced]);
+
+  // The opening order sequence plays on page load. Scrolling can complete it
+  // sooner, but reversing the page should not undo a placed order.
+  useEffect(() => {
+    if (scrollProgress !== undefined && scrollProgress >= 0.18 && orderStep === 0) {
+      setOrderStep(1);
+      onOrderPlaced?.();
     }
   }, [scrollProgress, orderStep, onOrderPlaced]);
 
-  // Fallback for initial auto-trigger if user does not scroll
+  // Auto-confirm the opening phone order even when the visitor has not scrolled.
   useEffect(() => {
-    if (scrollProgress !== undefined) return;
     const timer = setTimeout(() => {
       setOrderStep(1);
-      onOrderPlaced?.();
+      onOrderPlacedRef.current?.();
     }, 2400);
 
     return () => clearTimeout(timer);
-  }, [onOrderPlaced, scrollProgress]);
+  }, []);
 
   // If parent forces order placed
   useEffect(() => {

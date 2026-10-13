@@ -1,6 +1,5 @@
-// Delivery journey step configuration — the 7 stages of package delivery
-// Continues directly from the seller receiving the order
-
+// Storyboard scenes that follow the order confirmation and seller packing in the hero.
+// The original marketing sections, integrations, FAQ and contact content remain below the journey.
 import step02Packed from '@/assets/journey/step-02-packed.png';
 import step03Handover from '@/assets/journey/step-03-handover.png';
 import step04Warehouse from '@/assets/journey/step-04-warehouse.png';
@@ -22,81 +21,12 @@ export interface JourneyStep {
 }
 
 export const journeySteps: JourneyStep[] = [
-  {
-    stepNumber: '01',
-    category: 'SELLER → PACKAGE',
-    headlineWhite: 'Your Order,',
-    headlineOrange: 'Packed with Care.',
-    description: 'The order is verified and carefully packed into the official Jiffy parcel box. Labeled, sealed with security tape, and prepared for instant dispatch.',
-    backgroundImage: step02Packed,
-    direction: 'right-to-left',
-    badgeText: 'Order Packed & Sealed',
-    subLocation: 'Dark Store #04 // Station Leo',
-  },
-  {
-    stepNumber: '02',
-    category: 'PACKAGE → COURIER',
-    headlineWhite: 'Handed to Courier,',
-    headlineOrange: 'Shipment Accepted.',
-    description: 'Our dedicated courier partner arrives at the fulfillment hub, scans the barcode, and verifies custody. Real-time GPS tracking is officially active.',
-    backgroundImage: step03Handover,
-    direction: 'right-to-left',
-    badgeText: 'Shipment Accepted ✓',
-    subLocation: 'Hub Transfer Station',
-  },
-  {
-    stepNumber: '03',
-    category: 'COURIER → WAREHOUSE',
-    headlineWhite: 'In Transit,',
-    headlineOrange: 'To Logistics Hub.',
-    description: 'The package speeds across the city logistics artery to the primary sorting terminal, routed through high-speed automated sorting conveyors.',
-    backgroundImage: step04Warehouse,
-    direction: 'left-to-right',
-    badgeText: 'Inbound Sorting Active',
-    subLocation: 'Metro Sortation Center',
-  },
-  {
-    stepNumber: '04',
-    category: 'WAREHOUSE → AIR TRANSPORT',
-    headlineWhite: 'Wings of Speed,',
-    headlineOrange: 'Air Cargo Loaded.',
-    description: 'Transferred to the airport tarmac and loaded into cargo flight JF-702 for express cross-region flight. No delays, no bottlenecks.',
-    backgroundImage: step05Air,
-    direction: 'right-to-left',
-    badgeText: 'Loaded on Flight JF-702 ✈️',
-    subLocation: 'Tarmac Freight Gate 12',
-  },
-  {
-    stepNumber: '05',
-    category: 'AIR TRANSPORT → DESTINATION',
-    headlineWhite: 'Flight Touchdown,',
-    headlineOrange: 'Destination Hub.',
-    description: 'The cargo freighter lands at the regional distribution airport. The parcel enters the destination hub and is rapidly allocated to local delivery vans.',
-    backgroundImage: step06Destination,
-    direction: 'left-to-right',
-    badgeText: 'Destination Hub Arrival',
-    subLocation: 'Regional Distribution Center',
-  },
-  {
-    stepNumber: '06',
-    category: 'DESTINATION → LOCAL COURIER',
-    headlineWhite: 'Final-Mile Assigned,',
-    headlineOrange: 'Out for Delivery.',
-    description: 'The local courier partner receives the parcel, verifies delivery coordinates, and embarks on the final sprint directly to your address.',
-    backgroundImage: step07Delivery,
-    direction: 'left-to-right',
-    badgeText: 'Out for Final Delivery 🛵',
-    subLocation: 'Local Dispatch Terminal',
-  },
-  {
-    stepNumber: '07',
-    category: 'DELIVERY PERSON → CUSTOMER',
-    headlineWhite: 'At Your Door,',
-    headlineOrange: 'Package Delivered.',
-    description: 'Handed over directly to the delighted customer. Safe, verified, and complete in record time. Another delivery completed in a Jiffy!',
-    backgroundImage: step08Delivered,
-    direction: 'right-to-left',
-    badgeText: 'Package Delivered ✓',
-    subLocation: 'Customer Doorstep · 42 Nova Way',
-  },
+  { stepNumber: '01', category: 'FEATURES', headlineWhite: 'Quick commerce,', headlineOrange: 'in a Jiffy.', description: 'Fast local delivery with a logistics team that scales with your orders.', backgroundImage: step02Packed, direction: 'right-to-left', badgeText: 'Closer than you think', subLocation: 'Jiffy delivery network' },
+  { stepNumber: '02', category: 'COURIER HAND-OFF', headlineWhite: 'Every order,', headlineOrange: 'tracked live.', description: 'The parcel travels from the seller to a courier who catches and loads it for dispatch.', backgroundImage: step03Handover, direction: 'right-to-left', badgeText: 'Shipment accepted', subLocation: 'Courier transfer station' },
+  { stepNumber: '03', category: 'DARK STORE', headlineWhite: 'Near your', headlineOrange: 'customers.', description: 'A local logistics hub receives each parcel and routes it toward its destination.', backgroundImage: step04Warehouse, direction: 'left-to-right', badgeText: 'Inbound sorting active', subLocation: 'Jiffy logistics hub' },
+  { stepNumber: '04', category: 'INTEGRATIONS', headlineWhite: 'Works with', headlineOrange: 'your tools.', description: 'Connect your sales channels and manage the delivery journey from one place.', backgroundImage: step06Destination, direction: 'left-to-right', badgeText: 'One connected dashboard', subLocation: 'Connected commerce' },
+  { stepNumber: '05', category: 'AIR CARGO', headlineWhite: 'Across cities,', headlineOrange: 'without the wait.', description: 'Longer routes connect through air cargo and regional delivery hubs.', backgroundImage: step05Air, direction: 'right-to-left', badgeText: 'Cargo loaded', subLocation: 'Air freight terminal' },
+  { stepNumber: '06', category: 'HOW TO JIFFY', headlineWhite: 'From setup to', headlineOrange: 'scale.', description: 'Set up your store, prepare shipments, and follow each order as it moves.', backgroundImage: step02Packed, direction: 'right-to-left', badgeText: 'Track and scale', subLocation: 'Jiffy platform' },
+  { stepNumber: '07', category: 'FINAL MILE', headlineWhite: 'The final mile,', headlineOrange: 'handled.', description: 'The local courier takes the shipment onward for its last delivery leg.', backgroundImage: step07Delivery, direction: 'left-to-right', badgeText: 'Out for delivery', subLocation: 'Local dispatch' },
+  { stepNumber: '08', category: 'DELIVERED', headlineWhite: 'At your door,', headlineOrange: 'in a Jiffy.', description: 'The courier hands the parcel to the customer and completes the order.', backgroundImage: step08Delivered, direction: 'right-to-left', badgeText: 'Package delivered ✓', subLocation: 'Customer doorstep' },
 ];
