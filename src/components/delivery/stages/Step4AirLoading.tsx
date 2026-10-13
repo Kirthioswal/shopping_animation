@@ -4,7 +4,7 @@ import { DeliveryPackage } from '../DeliveryPackage';
 import { Plane, CheckCircle2, ArrowLeft, Radio, Gauge, ArrowRight } from 'lucide-react';
 import airCargoImg from '@/assets/journey/air-cargo.jpg';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
-import { smootherstep } from '@/utils/viewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step4Props {
   progress: number; // 0 to 1 for this step
@@ -14,53 +14,53 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
   const coords = useViewportCoordinates();
 
   // ─── SCROLL PACING & CHOREOGRAPHY (RIGHT -> CENTER -> LEFT) ───
-  // 0.00 → 0.22: Package leaves warehouse dock (RIGHT: RIGHT_POSITION) toward tarmac at CENTER (0)
+  // 0.00 → 0.22: Package leaves the LEFT-side warehouse dock and moves to center
   // 0.22 → 0.72: CENTER STORY MOMENT (50% generous dwell zone)
   //              • Package held fully visible at CENTER (0)
-  //              • "Air Cargo" message revealed on LEFT side
+  //              • "Air Cargo" message revealed on RIGHT side
   //              • Cargo Freighter Flight JF-702 visual active
   //              • Package loaded & cargo hold secured
-  // 0.72 → 0.88: Package visibly travels toward LEFT (LEFT_POSITION) with the air-cargo flight stage
+  // 0.72 → 0.88: Package travels from center to the RIGHT-side aircraft
   // 0.88 → 1.00: Breathing space before Stage 5 (Destination Hub) begins
 
   const isAtCenter = progress >= 0.22 && progress <= 0.72;
   const isLoadedInAirplane = progress >= 0.28;
-  const isFlyingLeft = progress > 0.72;
+  const isDepartingToNextHub = progress > 0.72;
 
-  // Package movement: RIGHT (RIGHT_POSITION) → CENTER (0) → LEFT (LEFT_POSITION)
+  // Package movement: LEFT (LEFT_POSITION) → CENTER (0) → RIGHT (RIGHT_POSITION)
   let packageX = coords.CENTER_POSITION;
   if (progress < 0.22) {
     const t = progress / 0.22;
-    packageX = coords.RIGHT_POSITION * (1 - smootherstep(t));
+    packageX = coords.LEFT_POSITION * (1 - smootherstep(t));
   } else if (progress <= 0.72) {
     packageX = coords.CENTER_POSITION;
   } else if (progress < 0.90) {
     const t = (progress - 0.72) / 0.18;
-    packageX = coords.LEFT_POSITION * smootherstep(t);
+    packageX = coords.RIGHT_POSITION * smootherstep(t);
   } else {
-    packageX = coords.LEFT_POSITION;
+    packageX = coords.RIGHT_POSITION;
   }
 
   // Vertical floating / gentle climb into cargo hold
   const packageY = isAtCenter
     ? Math.sin(progress * Math.PI * 2) * -7
-    : isFlyingLeft
+    : isDepartingToNextHub
     ? -smootherstep((progress - 0.72) / 0.18) * 12
     : Math.sin(progress * Math.PI * 2) * -7;
 
-  const packageScale = isAtCenter ? 1.08 : 0.96;
+  const packageScale = packageFocusScale(packageX, coords);
 
-  // Left-side Air Cargo Panel appearance
+  // Right-side Air Cargo Panel appearance
   let airCargoOpacity = 0;
-  let airCargoX = -30;
+  let airCargoX = 30;
   if (progress < 0.14) {
     airCargoOpacity = 0;
-    airCargoX = -30;
+    airCargoX = 30;
   } else if (progress < 0.26) {
     const t = (progress - 0.14) / 0.12;
     const s = smootherstep(t);
     airCargoOpacity = s;
-    airCargoX = -30 * (1 - s);
+    airCargoX = 30 * (1 - s);
   } else if (progress <= 0.80) {
     airCargoOpacity = 1;
     airCargoX = 0;
@@ -68,13 +68,13 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
     const t = (progress - 0.80) / 0.14;
     const s = smootherstep(t);
     airCargoOpacity = Math.max(0, 1 - s * 1.2);
-    airCargoX = -s * 20;
+    airCargoX = s * 20;
   } else {
     airCargoOpacity = 0;
-    airCargoX = -20;
+    airCargoX = 20;
   }
 
-  // Right-side Outbound Warehouse origin badge (fades out smoothly as package reaches center)
+  // Left-side warehouse origin badge fades as the package reaches center.
   const rightOriginOpacity = Math.max(0, 1 - smootherstep(progress * 4.5));
 
   return (
@@ -95,15 +95,15 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          1. RIGHT SIDE: OUTBOUND FROM WAREHOUSE (Transitional bridge from Step 3)
+          1. LEFT SIDE: OUTBOUND FROM WAREHOUSE (Transitional bridge from Step 3)
           Fades out quickly as package arrives at center
           ───────────────────────────────────────────────────────────── */}
       {rightOriginOpacity > 0.01 && (
         <div
-          className="absolute right-6 sm:right-12 lg:right-16 top-[56%] -translate-y-1/2 z-20 pointer-events-none max-w-xs"
+          className="absolute left-6 sm:left-12 lg:left-16 top-[56%] -translate-y-1/2 z-20 pointer-events-none max-w-xs"
           style={{
             opacity: rightOriginOpacity,
-            transform: `translate3d(${progress * 40}px, -50%, 0)`,
+            transform: `translate3d(${-progress * 40}px, -50%, 0)`,
           }}
         >
           <div className="bg-neutral-950/90 border border-neutral-800 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl text-left">
@@ -123,11 +123,11 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
       )}
 
       {/* ─────────────────────────────────────────────────────────────
-          2. LEFT SIDE: AIR CARGO PANEL
-          Positioned on the LEFT side of the screen
+          2. RIGHT SIDE: AIR CARGO PANEL
+          Positioned on the RIGHT side of the screen
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute left-6 sm:left-10 lg:left-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
+        className="absolute right-6 sm:right-10 lg:right-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
         style={{
           top: coords.CENTER_Y,
           opacity: airCargoOpacity,
@@ -209,7 +209,7 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
                     }
                   : {}
               }
-              transition={{ type: 'spring', stiffness: 450, damping: 18 }}
+              transition={{ duration: 0.9, ease: 'easeInOut' }}
               className={`text-[9px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border ${
                 isLoadedInAirplane
                   ? 'bg-sky-500/25 text-sky-200 border-sky-500/60 shadow-lg shadow-sky-500/30'
@@ -267,7 +267,7 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
           Visibly travels from warehouse into the airplane cargo bay
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
+        className="relative z-40 flex flex-col items-center"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
@@ -288,7 +288,7 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
           statusText={
             progress < 0.22
               ? 'Tarmac Transit toward Airplane ←'
-              : isFlyingLeft
+              : isDepartingToNextHub
               ? 'Flight JF-702 Airborne ←'
               : isLoadedInAirplane
               ? 'Air Cargo Hold Secured ✈️'
@@ -332,4 +332,3 @@ export const Step4AirLoading: React.FC<Step4Props> = ({ progress }) => {
     </div>
   );
 };
-

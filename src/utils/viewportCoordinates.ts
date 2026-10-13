@@ -72,6 +72,19 @@ export function smootherstep(t: number): number {
   return c * c * c * (c * (c * 6 - 15) + 10);
 }
 
+/** Keep the parcel compact at the side zones and let it fill about two thirds
+ * of the viewport as it crosses the center of the delivery route. */
+export function packageFocusScale(x: number, coords: ViewportCoordinates): number {
+  const baseWidth = coords.isMobile ? 190 : 220;
+  // Keep the parcel clearly compact at either edge so the center arrival reads
+  // as the intentional hero moment, rather than making the side look larger.
+  const sideScale = coords.isMobile ? 0.42 : 0.48;
+  const centerScale = (coords.viewportWidth * 0.66) / baseWidth;
+  const maxOffset = Math.max(Math.abs(coords.LEFT_POSITION), Math.abs(coords.RIGHT_POSITION));
+  const centerAmount = 1 - smootherstep(Math.abs(x) / maxOffset);
+  return sideScale + (centerScale - sideScale) * centerAmount;
+}
+
 /**
  * Calculates responsive viewport coordinates accounting for object dimensions and edge safety
  */

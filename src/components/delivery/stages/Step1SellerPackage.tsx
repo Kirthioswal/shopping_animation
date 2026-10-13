@@ -200,7 +200,7 @@ export const Step1SellerPackage: React.FC<Step1Props> = ({ progress }) => {
 
         {/* PHYSICAL PACKAGE (CONNECTED TO ASTRONAUT'S PACKING ACTION) */}
         <div
-          className="relative transition-transform duration-75 ease-out flex flex-col items-center"
+          className="relative flex flex-col items-center"
           style={{
             transform: `translate3d(${packageExitX}px, 0, 0)`,
             willChange: 'transform',

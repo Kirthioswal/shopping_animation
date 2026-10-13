@@ -13,23 +13,26 @@ const Index = () => {
   useSmoothScroll();
 
   return (
-    <div className="relative bg-black">
-      <Header />
-
-      {/* Fixed 3D Canvas Overlay (Celebration Particles) */}
+    <div className="relative isolate bg-black">
+      {/* The transparent 3D canvas stays behind the page so it can never cover
+          shipment content if WebGL briefly paints a black frame. */}
       <PackageScene />
 
-      {/* Scrollable Content: Phone order -> Notification flight -> Seller computer */}
-      <HeroSection />
+      <div className="relative z-10">
+        <Header />
 
-      {/* Continuous Scroll-Driven Delivery Journey: Steps 1 to 7 */}
-      <DeliveryJourney />
+        {/* Scrollable Content: Phone order -> Notification flight -> Seller computer */}
+        <HeroSection />
 
-      {/* Existing sections (kept) */}
-      <IntegrationSection />
-      <FAQSection />
-      <CTASection />
-      <Footer />
+        {/* Continuous Scroll-Driven Delivery Journey: Steps 1 to 7 */}
+        <DeliveryJourney />
+
+        {/* Existing sections (kept) */}
+        <IntegrationSection />
+        <FAQSection />
+        <CTASection />
+        <Footer />
+      </div>
     </div>
   );
 };

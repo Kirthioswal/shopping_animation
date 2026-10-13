@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import astronautCourierPartnerImg from '@/assets/astronaut/astronaut-courier-partner.jpg';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
-import { smootherstep } from '@/utils/viewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step7Props {
   progress: number; // 0 to 1 for this step
@@ -64,14 +64,7 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
     : Math.sin(progress * Math.PI * 2) * -6;
 
   // Emotional payoff: gentle scale up when delivered
-  let packageScale = 0.98;
-  if (isAtCenter) {
-    packageScale = 1.08;
-  } else if (isMovingToCustomer) {
-    packageScale = 1.04;
-  } else if (isDelivered) {
-    packageScale = 1.12; // subtle scale up on completed delivery
-  }
+  const packageScale = packageFocusScale(packageX, coords);
 
   // Delivery Person (RIGHT side) entrance and handover movement
   let deliveryPersonOpacity = 0;
@@ -248,7 +241,7 @@ export const Step7CustomerDelivered: React.FC<Step7Props> = ({ progress }) => {
           Delivery Person → Package → Customer
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute z-30 transition-transform duration-75 ease-out"
+        className="absolute z-30"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',

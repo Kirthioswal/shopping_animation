@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import logo from '@/assets/logo.png';
+import { scrollToPageTop, scrollToSection as smoothScrollToSection } from '@/lib/smoothScroll';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -31,13 +32,13 @@ const Header = () => {
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          smoothScrollToSection(element);
         }
       }, 100);
     } else {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        smoothScrollToSection(element);
       }
     }
   };
@@ -45,7 +46,7 @@ const Header = () => {
   const handleHomeClick = () => {
     setIsMobileMenuOpen(false);
     if (location.pathname === '/') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      scrollToPageTop();
     } else {
       navigate('/');
     }
@@ -53,7 +54,7 @@ const Header = () => {
 
   const navItems = [
     { label: 'Home', action: handleHomeClick },
-    { label: 'Journey', action: () => scrollToSection('journey-step-0') },
+    { label: 'Journey', action: () => scrollToSection('delivery-journey-section') },
     { label: 'Platform', action: () => scrollToSection('integration-section') },
     { label: 'FAQs', action: () => scrollToSection('faq-section') },
   ];

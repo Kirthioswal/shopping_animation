@@ -38,7 +38,7 @@ export const DeliveryPackage: React.FC<DeliveryPackageProps> = ({
 }) => {
   return (
     <div
-      className={`relative select-none pointer-events-none transition-transform duration-300 ${className}`}
+      className={`relative select-none pointer-events-none ${className}`}
       style={{
         transform: `scale(${scale}) rotate(${rotation}deg)`,
         transformOrigin: 'center center',
@@ -155,10 +155,8 @@ export const DeliveryPackage: React.FC<DeliveryPackageProps> = ({
               rotateX: [45, -10, 0],
             }}
             transition={{
-              type: 'spring',
-              stiffness: 480,
-              damping: 20,
-              mass: 0.7,
+              duration: 0.5,
+              ease: [0.22, 1, 0.36, 1],
             }}
             style={{
               transformStyle: 'preserve-3d',

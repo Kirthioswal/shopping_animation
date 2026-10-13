@@ -96,9 +96,9 @@ const HeroSection = () => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top top',
-        end: '+=520%',
+        end: '+=650%',
         pin: true,
-        scrub: 0.8,
+        scrub: 1,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {

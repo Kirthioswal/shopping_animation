@@ -15,7 +15,7 @@ import courierHandoverImg from '@/assets/journey/courier-handover.jpg';
 import courierPartnerImg from '@/assets/journey/courier-partner.jpg';
 import astronautCourierImg from '@/assets/astronaut/astronaut-courier-partner.jpg';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
-import { smootherstep } from '@/utils/viewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step2Props {
   progress: number; // 0 to 1 for this step
@@ -45,8 +45,9 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // PHASE 1 VARIABLES (0:13 COURIER TRANSFER)
   // ─────────────────────────────────────────────────────────────
   const p1 = Math.min(Math.max(progress / 0.48, 0), 1);
-  const sellerPackageStartX = coords.RIGHT_POSITION - Math.round(coords.viewportWidth * 0.12);
-  const isP1AtHandover = p1 >= 0.82;
+  // Start at the actual right edge zone. This gives the parcel a clearly small
+  // side scale before it grows toward the center focus point.
+  const sellerPackageStartX = coords.RIGHT_POSITION;
   const isP1HandoverComplete = p1 >= 0.82;
   const showTransferMessage = isPhase1 && p1 >= 0.28 && p1 <= 0.96;
   const isP1Scanning = isPhase1 && p1 >= 0.62 && p1 < 0.88;
@@ -78,14 +79,14 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // PHASE 2 VARIABLES (0:17 COURIER PARTNER & ASTRONAUT COURIER)
   // ─────────────────────────────────────────────────────────────
   const p2 = Math.min(Math.max((progress - 0.48) / 0.52, 0), 1);
-  const isP2AtCenter = false;
   const isAcceptedByCourierPartner = p2 >= 0.36;
   const isLoadedOnTruck = p2 >= 0.66;
   const truckLoadProgress = smootherstep(Math.min(Math.max((p2 - 0.48) / 0.18, 0), 1));
+  const truckTravelProgress = smootherstep(Math.min(Math.max((p2 - 0.74) / 0.24, 0), 1));
 
-  // The courier catches the parcel in the left lane, loads it onto the truck,
-  // and the next warehouse scene carries it from left to right.
-  const p2PackageX = coords.LEFT_POSITION;
+  // The courier catches and loads the parcel on the left; the loaded truck then
+  // drives across to the right, setting up the warehouse's return path to left.
+  const p2PackageX = coords.LEFT_POSITION + truckTravelProgress * (coords.RIGHT_POSITION - coords.LEFT_POSITION);
 
   // Existing Courier Partner panel on RIGHT side (kept in position, "Leo" removed)
   let courierPartnerOpacity = 0;
@@ -131,8 +132,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
   // Unified Package parameters
   const currentPackageX = isPhase1 ? p1PackageX : p2PackageX;
   const packageY = Math.sin(progress * Math.PI * 2) * -7 + (isPhase2 ? truckLoadProgress * 30 : 0);
-  const currentPackageScale =
-    (isPhase1 && isP1AtHandover) || (isPhase2 && isP2AtCenter) ? 1.08 : 0.98;
+  const currentPackageScale = packageFocusScale(currentPackageX, coords);
   const currentRotation =
     isPhase1
       ? isP1HandoverComplete
@@ -152,7 +152,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
         <div
           className="absolute z-20 pointer-events-none"
           style={{
-            left: coords.absoluteLeftX,
+            left: coords.absoluteLeftX + truckTravelProgress * (coords.absoluteRightX - coords.absoluteLeftX),
             top: coords.CENTER_Y + 120,
             opacity: smootherstep(Math.min((p2 - 0.36) / 0.18, 1)),
             transform: 'translate3d(-50%, -50%, 0)',
@@ -473,7 +473,7 @@ export const Step2CourierHandover: React.FC<Step2Props> = ({ progress }) => {
           • In Phase 2 (0:17): LEFT → CENTER (focus) → RIGHT (accepted)
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
+        className="relative z-40 flex flex-col items-center"
         style={{
           transform: `translate3d(${currentPackageX}px, ${packageY}px, 0)`,
           willChange: 'transform',

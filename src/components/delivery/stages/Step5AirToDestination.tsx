@@ -210,7 +210,7 @@ export const Step5AirToDestination: React.FC<Step5Props> = ({ progress }) => {
                     }
                   : {}
               }
-              transition={{ type: 'spring', stiffness: 450, damping: 18 }}
+              transition={{ duration: 0.9, ease: 'easeInOut' }}
               className={`text-[9px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border ${
                 isLandedAtDestination
                   ? 'bg-emerald-500/25 text-emerald-300 border-emerald-500/60 shadow-lg shadow-emerald-500/30'
@@ -268,7 +268,7 @@ export const Step5AirToDestination: React.FC<Step5Props> = ({ progress }) => {
           Visibly arrives from flight and enters the Regional Hub
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
+        className="relative z-40 flex flex-col items-center"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
@@ -333,4 +333,3 @@ export const Step5AirToDestination: React.FC<Step5Props> = ({ progress }) => {
     </div>
   );
 };
-

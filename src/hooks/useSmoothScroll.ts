@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Lenis from '@studio-freight/lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { setSmoothScroller } from '@/lib/smoothScroll';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,11 +13,12 @@ gsap.registerPlugin(ScrollTrigger);
 export function useSmoothScroll() {
   useEffect(() => {
     const lenis = new Lenis({
-      lerp: 0.12,
+      lerp: 0.08,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 0.68,
       syncTouch: false,
     });
+    setSmoothScroller(lenis);
 
     // Sync Lenis scroll position with ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
@@ -31,6 +33,7 @@ export function useSmoothScroll() {
     return () => {
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
+      setSmoothScroller(null);
     };
   }, []);
 }

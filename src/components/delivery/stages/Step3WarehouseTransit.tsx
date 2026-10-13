@@ -11,7 +11,7 @@ import {
   Radio,
 } from 'lucide-react';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
-import { smootherstep } from '@/utils/viewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step3Props {
   progress: number; // 0 to 1 for this step
@@ -29,13 +29,13 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
   // 0.72 → 0.88: Package completes its rightward travel into the warehouse
   // 0.88 → 1.00: Brief hold & small breathing space before Stage 4 (Air Cargo) begins
 
-  const isAtCenter = false;
   const isProcessing = progress >= 0.28;
   const isEnteringWarehouse = progress > 0.72;
 
-  // The route runs straight from the courier's left-side lane into the receiving bay on the right.
+  // The loaded courier truck arrives from the right; the parcel travels back
+  // across the screen and enters the warehouse on the left.
   const routeProgress = smootherstep(Math.min(progress / 0.88, 1));
-  const packageX = coords.LEFT_POSITION + (coords.RIGHT_POSITION - coords.LEFT_POSITION) * routeProgress;
+  const packageX = coords.RIGHT_POSITION + (coords.LEFT_POSITION - coords.RIGHT_POSITION) * routeProgress;
 
   // Vertical floating bobbing
   const warehouseApproachProgress = Math.min(Math.max((progress - 0.72) / 0.18, 0), 1);
@@ -44,20 +44,20 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
   // The final leg narrows into the visible warehouse bay; scale and fade only
   // after the package has reached the doorway so it reads as entering it.
   const entryProgress = progress > 0.78 ? Math.min((progress - 0.78) / 0.12, 1) : 0;
-  const packageScale = isAtCenter ? 1.08 : 0.96 - smootherstep(entryProgress) * 0.58;
+  const packageScale = packageFocusScale(packageX, coords) * (1 - smootherstep(entryProgress) * 0.6);
   const packageOpacity = 1 - smootherstep(entryProgress);
 
-  // Right-side Warehouse Panel appearance
+  // Left-side Warehouse Panel appearance
   let warehouseOpacity = 0;
-  let warehouseX = 30;
+  let warehouseX = -30;
   if (progress < 0.14) {
     warehouseOpacity = 0;
-    warehouseX = 30;
+    warehouseX = -30;
   } else if (progress < 0.26) {
     const t = (progress - 0.14) / 0.12;
     const s = smootherstep(t);
     warehouseOpacity = s;
-    warehouseX = 30 * (1 - s);
+    warehouseX = -30 * (1 - s);
   } else if (progress <= 0.80) {
     warehouseOpacity = 1;
     warehouseX = 0;
@@ -65,13 +65,13 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
     const t = (progress - 0.80) / 0.14;
     const s = smootherstep(t);
     warehouseOpacity = Math.max(0, 1 - s * 1.2);
-    warehouseX = s * 20;
+    warehouseX = -s * 20;
   } else {
     warehouseOpacity = 0;
-    warehouseX = 20;
+    warehouseX = -20;
   }
 
-  // Left-side Inbound Courier origin badge (fades out smoothly as package arrives at center)
+  // Right-side courier origin badge fades as the parcel returns toward the bay.
   const leftOriginOpacity = Math.max(0, 1 - smootherstep(progress * 4.5));
 
   return (
@@ -88,15 +88,15 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          1. LEFT SIDE: INBOUND FROM COURIER (Transitional bridge from Step 2)
+          1. RIGHT SIDE: INBOUND FROM COURIER (Transitional bridge from Step 2)
           Fades out quickly as package settles at center
           ───────────────────────────────────────────────────────────── */}
       {leftOriginOpacity > 0.01 && (
         <div
-          className="absolute left-6 sm:left-12 lg:left-16 top-[56%] -translate-y-1/2 z-20 pointer-events-none max-w-xs"
+          className="absolute right-6 sm:right-12 lg:right-16 top-[56%] -translate-y-1/2 z-20 pointer-events-none max-w-xs"
           style={{
             opacity: leftOriginOpacity,
-            transform: `translate3d(${-progress * 40}px, -50%, 0)`,
+            transform: `translate3d(${progress * 40}px, -50%, 0)`,
           }}
         >
           <div className="bg-neutral-950/90 border border-neutral-800 rounded-2xl p-3.5 shadow-2xl backdrop-blur-xl">
@@ -116,14 +116,14 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
       )}
 
       {/* ─────────────────────────────────────────────────────────────
-          2. RIGHT SIDE: WAREHOUSE PANEL
+          2. LEFT SIDE: WAREHOUSE PANEL
           Hierarchy:
             "Processing in Warehouse" (MESSAGE ABOVE)
             ↓
             "Connect Logistics Warehouse" (WAREHOUSE BOX & VISUAL BELOW)
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute right-6 sm:right-10 lg:right-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
+        className="absolute left-6 sm:left-10 lg:left-14 -translate-y-1/2 z-30 pointer-events-auto max-w-xs sm:max-w-sm lg:max-w-md"
         style={{
           top: coords.CENTER_Y,
           opacity: warehouseOpacity,
@@ -206,7 +206,7 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
                     }
                   : {}
               }
-              transition={{ type: 'spring', stiffness: 450, damping: 18 }}
+              transition={{ duration: 0.9, ease: 'easeInOut' }}
               className={`text-[9px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border ${
                 isProcessing
                   ? 'bg-orange-500/25 text-orange-300 border-orange-500/60 shadow-lg shadow-orange-500/30'
@@ -270,11 +270,11 @@ export const Step3WarehouseTransit: React.FC<Step3Props> = ({ progress }) => {
       </div>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. MOVING PACKAGE (COURIER [LEFT] -> CENTER -> RIGHT / WAREHOUSE)
+          3. MOVING PACKAGE (COURIER TRUCK [RIGHT] -> CENTER -> LEFT / WAREHOUSE)
           Visibly travels into the warehouse without sudden appearance/disappearance
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="relative z-40 transition-transform duration-75 ease-out flex flex-col items-center"
+        className="relative z-40 flex flex-col items-center"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           opacity: packageOpacity,

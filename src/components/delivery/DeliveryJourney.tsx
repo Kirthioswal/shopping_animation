@@ -10,19 +10,51 @@ import { Step3WarehouseTransit } from './stages/Step3WarehouseTransit';
 import { Step4AirLoading } from './stages/Step4AirLoading';
 import { Step6LocalCourier } from './stages/Step6LocalCourier';
 import { Step7CustomerDelivered } from './stages/Step7CustomerDelivered';
+import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 gsap.registerPlugin(ScrollTrigger);
 
+class SceneErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('Delivery scene failed to render:', error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="absolute inset-0 z-30 flex items-center justify-center bg-neutral-950 px-6 text-center">
+          <div>
+            <p className="text-xs font-mono uppercase tracking-[0.24em] text-orange-300">Shipment in progress</p>
+            <p className="mt-3 text-lg font-semibold text-white">Continue scrolling to see the next delivery update.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 // Scene lengths follow the storyboard's relative scroll budgets.
 const SCENES = [
-  { weight: 4, kind: 'feature', cards: ['30-minute deliveries', 'Closer than you think', '10 to 10,000 orders', 'Always on duty'], direction: 'right' as const },
-  { weight: 1.2, kind: 'catch' },
-  { weight: 2, kind: 'warehouse' },
-  { weight: 4.5, kind: 'feature', cards: ['Integrates with your favorite tools', 'One dashboard', 'Pick your couriers', 'Real-time tracking', 'Better rates'], direction: 'left' as const },
-  { weight: 2, kind: 'air' },
-  { weight: 4.5, kind: 'feature', cards: ['Sign up', 'Set up your store', 'Stock your dark store', 'Shipment ready', 'Track and scale'], direction: 'right' as const },
-  { weight: 1, kind: 'handoff' },
-  { weight: 2.5, kind: 'delivered' },
+  { weight: 4, kind: 'feature', cards: ['From dark stores to doorsteps', 'Quick commerce logistics made effortless', 'Delivering products to your customers in record time', 'Your Logistics Crew, Always On Duty.', "From scanning to shipping, Jiffy's smart team works round the clock."], direction: 'right' as const },
+  { weight: 1.8, kind: 'catch' },
+  { weight: 2.6, kind: 'warehouse' },
+  { weight: 4.5, kind: 'feature', cards: ['Streamline business processes', 'Bring your favorite tools and AI helpers together', 'AI for business', 'Make working with integrations easier than ever'], direction: 'left' as const },
+  { weight: 2.6, kind: 'air' },
+  { weight: 4.5, kind: 'feature', cards: ['Step 1: Sign Up', 'Step 2: Setup Store', 'Step 3: Dark Store Stockup', 'Step 4: Shipment is Ready', 'Step 5: Track & Scale'], direction: 'right' as const },
+  { weight: 1.6, kind: 'handoff' },
+  { weight: 3, kind: 'delivered' },
 ];
 const TOTAL_WEIGHT = SCENES.reduce((sum, scene) => sum + scene.weight, 0);
 const ICONS = [Package, Bike, Warehouse, Package, Plane, Sparkles, Bike, CheckCircle2];
@@ -41,35 +73,47 @@ function getScene(progress: number) {
 }
 
 const FeatureShowcase: React.FC<{ progress: number; cards: string[]; direction: 'left' | 'right' }> = ({ progress, cards, direction }) => {
-  const fromRight = direction === 'right';
-  const arrival = Math.min(1, progress / 0.22);
-  const ease = arrival * arrival * (3 - 2 * arrival);
-  const x = (fromRight ? 1 : -1) * (1 - ease) * Math.min(window.innerWidth * 0.34, 480);
-  const cardIndex = Math.min(cards.length - 1, Math.floor(Math.max(0, progress - 0.24) / 0.7 * cards.length));
-  const cardOpacity = progress < 0.24 ? 0 : Math.min(1, Math.min((progress - 0.24) * 7, (1 - progress) * 8));
+  const coords = useViewportCoordinates();
+  // One deliberate side-to-side pass per scene. Ease into the center, pause
+  // there for the product moment, then ease out to the opposite side.
+  const startsOnLeft = direction === 'right';
+  const startX = startsOnLeft ? coords.LEFT_POSITION : coords.RIGHT_POSITION;
+  const endX = startsOnLeft ? coords.RIGHT_POSITION : coords.LEFT_POSITION;
+  const centerIn = 0.42;
+  const centerOut = 0.60;
+  const x = progress < centerIn
+    ? startX * (1 - smootherstep(progress / centerIn))
+    : progress <= centerOut
+      ? 0
+      : endX * smootherstep((progress - centerOut) / (1 - centerOut));
+  const scale = packageFocusScale(x, coords);
+  const centerProximity = 1 - Math.min(1, Math.abs(x) / Math.max(Math.abs(coords.LEFT_POSITION), Math.abs(coords.RIGHT_POSITION)));
+  const cardPosition = progress * cards.length;
+  const cardIndex = Math.min(cards.length - 1, Math.floor(cardPosition));
+  const cardPhase = cardPosition - Math.floor(cardPosition);
+  const cardFade = smootherstep(Math.min(1, cardPhase / 0.2))
+    * smootherstep(Math.min(1, (1 - cardPhase) / 0.2));
+  const cardOpacity = Math.max(0, cardFade) * (1 - centerProximity * 0.72);
+  const copyOnLeft = startsOnLeft;
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_52%,rgba(249,115,22,0.16),transparent_56%)]" />
-      <div className="absolute inset-x-0 bottom-[16%] h-px bg-gradient-to-r from-transparent via-orange-400/50 to-transparent" />
-      <div className="relative flex items-center justify-center" style={{ transform: `translate3d(${x}px, ${Math.sin(progress * Math.PI * 2) * 8}px, 0) scale(${0.86 + ease * 0.14})`, opacity: 0.35 + ease * 0.65, willChange: 'transform' }}>
-        <div className="relative rounded-[28px] border border-orange-200/40 bg-gradient-to-br from-[#d4a373] via-[#bc8a5f] to-[#805638] p-5 sm:p-8 shadow-[0_35px_110px_rgba(0,0,0,.8),0_0_70px_rgba(249,115,22,.25)] w-[min(72vw,780px)] aspect-[1.42/1]">
-          <div className="absolute inset-y-0 left-[44%] w-[12%] bg-gradient-to-r from-[#f97316] via-[#ff9b38] to-[#e35b09] shadow-[0_0_28px_rgba(249,115,22,.35)]" />
-          <div className="absolute inset-3 sm:inset-5 border border-black/15 rounded-2xl pointer-events-none" />
-          <div className="absolute left-[6%] top-[8%] text-black/75 font-black text-xs sm:text-lg tracking-tight">JIFFY <span className="font-medium">EXPRESS</span></div>
-          <div className="absolute left-[7%] bottom-[8%] text-black/60 font-mono text-[8px] sm:text-xs">#JFY-9082 · PRIORITY</div>
-          <div className="absolute inset-0 flex items-center justify-center px-8 sm:px-20">
-            <div className="rounded-2xl border border-white/30 bg-neutral-950/90 backdrop-blur-xl px-5 sm:px-10 py-4 sm:py-7 text-center shadow-2xl transition-all duration-300" style={{ opacity: cardOpacity, transform: `translateY(${(1 - cardOpacity) * 16}px)` }}>
-              <div className="text-[9px] sm:text-xs font-mono uppercase tracking-[0.24em] text-orange-300 mb-2">Jiffy · {String(cardIndex + 1).padStart(2, '0')}</div>
-              <div className="text-lg sm:text-3xl md:text-4xl font-extrabold text-white">{cards[cardIndex]}</div>
-            </div>
-          </div>
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_54%,rgba(249,115,22,0.08),transparent_56%)]" />
+      <div className="absolute inset-x-0 bottom-[16%] h-px bg-gradient-to-r from-transparent via-orange-400/30 to-transparent" />
+      <div className={`absolute top-1/2 -translate-y-1/2 w-[min(40vw,460px)] px-5 sm:px-10 ${copyOnLeft ? 'left-0 sm:left-[4%] text-left' : 'right-0 sm:right-[4%] text-right'}`}>
+        <div className="mb-3 text-[9px] sm:text-xs font-mono uppercase tracking-[0.24em] text-orange-300" style={{ opacity: cardOpacity }}>Jiffy · {String(cardIndex + 1).padStart(2, '0')}</div>
+        <div className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,.8)]" style={{ opacity: cardOpacity, transform: `translate3d(0,${(1 - cardOpacity) * 10}px,0)` }}>{cards[cardIndex]}</div>
+        <div className={`mt-5 flex gap-1.5 ${copyOnLeft ? '' : 'justify-end'}`} aria-hidden="true">
+          {cards.map((card, i) => <span key={card} className={`h-1 rounded-full ${i === cardIndex ? 'w-8 bg-orange-400' : 'w-2 bg-white/30'}`} />)}
         </div>
       </div>
-      <div className="absolute bottom-[22%] flex gap-2" aria-hidden="true">
-        {cards.map((card, i) => <span key={card} className={`h-1 rounded-full transition-all duration-300 ${i === cardIndex ? 'w-8 bg-orange-400' : 'w-2 bg-white/30'}`} />)}
+      <div
+        className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+        style={{ transform: `translate3d(calc(-50% + ${x}px), -50%, 0)`, willChange: 'transform' }}
+      >
+        <DeliveryPackage scale={scale} className="!transition-none drop-shadow-[0_18px_40px_rgba(0,0,0,.65)]" />
       </div>
-      <div className="absolute bottom-[12%] text-[10px] sm:text-xs font-mono tracking-[0.25em] text-white/45 uppercase">Scroll to explore</div>
+      <div className="absolute bottom-[12%] inset-x-0 text-center text-[9px] sm:text-[10px] font-mono tracking-[0.25em] text-white/40 uppercase">Follow the parcel</div>
     </div>
   );
 };
@@ -92,9 +136,9 @@ export const DeliveryJourney: React.FC = () => {
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: 'top top',
-        end: '+=1400%',
+        end: '+=2100%',
         pin: true,
-        scrub: 0.7,
+        scrub: 1.35,
         anticipatePin: 1,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
@@ -130,9 +174,9 @@ export const DeliveryJourney: React.FC = () => {
   })();
 
   return (
-    <div id="delivery-journey-section" ref={containerRef} className="relative w-full h-screen bg-black overflow-hidden select-none">
+    <div id="delivery-journey-section" ref={containerRef} className="relative w-full h-screen scroll-mt-24 bg-black overflow-hidden select-none">
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {journeySteps.map((step, i) => {
+        {scene.kind !== 'feature' && journeySteps.map((step, i) => {
           const opacity = Math.max(0, 1 - Math.abs(index + local - i)) * 0.32;
           return opacity > 0.01 ? <img key={i} src={step.backgroundImage} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ opacity, filter: 'brightness(.55) contrast(1.08)' }} /> : null;
         })}
@@ -160,7 +204,9 @@ export const DeliveryJourney: React.FC = () => {
         </div>
       </div>
 
-      <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">{stageView}</div>
+      <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-center">
+        <SceneErrorBoundary key={index}>{stageView}</SceneErrorBoundary>
+      </div>
 
       <div className="absolute bottom-5 inset-x-0 z-40 px-4 sm:px-12 max-w-7xl mx-auto flex items-center justify-between text-neutral-400 font-mono text-[10px] pointer-events-none">
         <span className="text-white font-bold tracking-wide">{currentStep.badgeText}</span>

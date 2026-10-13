@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import packedDeliveryImg from '@/assets/journey/packed-delivery.jpg';
 import { useViewportCoordinates } from '@/hooks/useViewportCoordinates';
-import { smootherstep } from '@/utils/viewportCoordinates';
+import { packageFocusScale, smootherstep } from '@/utils/viewportCoordinates';
 
 interface Step6Props {
   progress: number; // 0 to 1 for this step
@@ -54,7 +54,7 @@ export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
     ? Math.sin((progress / 0.22) * Math.PI) * -12
     : Math.sin(progress * Math.PI * 2) * -6;
 
-  const packageScale = isAtCenter ? 1.08 : 0.96;
+  const packageScale = packageFocusScale(packageX, coords);
 
   // Left-side Packed Delivery Panel appearance
   let panelOpacity = 0;
@@ -220,7 +220,7 @@ export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
                     }
                   : {}
               }
-              transition={{ type: 'spring', stiffness: 450, damping: 18 }}
+              transition={{ duration: 0.9, ease: 'easeInOut' }}
               className={`text-[9px] font-mono font-bold uppercase px-2.5 py-1 rounded-full border ${
                 isAssignedToRider
                   ? 'bg-emerald-500/25 text-emerald-200 border-emerald-500/60 shadow-lg shadow-emerald-500/30'
@@ -275,7 +275,7 @@ export const Step6LocalCourier: React.FC<Step6Props> = ({ progress }) => {
           Exact same package (#JFY-9082) moving seamlessly
           ───────────────────────────────────────────────────────────── */}
       <div
-        className="absolute z-30 transition-transform duration-75 ease-out"
+        className="absolute z-30"
         style={{
           transform: `translate3d(${packageX}px, ${packageY}px, 0)`,
           willChange: 'transform',
